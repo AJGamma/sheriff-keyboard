@@ -19,13 +19,16 @@ units:
   switchplate_scrollwheel_cutout_y: 14.5
   switchplate_screw_diameter: 3.3
   switchplate_screw_hole: 2.2
-  thumb_radius: 65
+  thumb_radius: 60
+  thumbfan_angle: 20
+  thumbfan_start_angle: 74
 points:
   zones:
     # The primary 6x4 key matrix, plus 3 modifiers.
     matrix:
       # Choc spacing
       key:
+        tags: [switch]
         padding: 1ky
         spread: 1kx
       columns:
@@ -64,33 +67,38 @@ points:
     thumbfan_inner:
       # Choc spacing
       key:
+        tags: [switch]
         padding: 1px
-        spread: 1.2ky
-        splay: -24
-        stagger: -6
         rotate: 90
       # Place thumbs where the inner mod would go.
       anchor:
         ref: matrix_inner_mod
-        shift: [1.2, 2.5]
+        # orient: thumbfan_start_angle
+        # shift: [thumb_radius - 6, 0]
 
     thumbfan_home:
+      key:
+        tags: [switch]
       anchor:
         ref: thumb_center
-        orient: 56
+        orient: thumbfan_start_angle - thumbfan_angle
         shift: [thumb_radius, 0]
-        rotate: 10
+        # rotate: 10
 
     thumbfan_outer:
+      key:
+        tags: [switch]
       anchor:
         ref: thumb_center
-        orient: 38
+        orient: thumbfan_start_angle - 2*thumbfan_angle
         shift: [thumb_radius, 0]
-        rotate: 10
+        # rotate: 10
     thumbfanfar:
+      key:
+        tags: [switch]
       anchor:
         ref: thumb_center
-        orient: 20
+        orient: thumbfan_start_angle - 3*thumbfan_angle
         shift: [thumb_radius, 0]
-        rotate: 10
+        # rotate: 10
 
