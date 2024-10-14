@@ -1,9 +1,11 @@
 units:
-  kx: cx
-  ky: cy
-  padding: 0.4
+  kx: U
+  ky: U
+  padding: 4
   px: kx+padding
   py: ky+padding
+  sx: 0.5px
+  sy: 0.5py
   mcu_height: 34
   mcu_width: 18
   # distance keys to mcu
@@ -20,10 +22,14 @@ units:
   switchplate_screw_diameter: 3.3
   switchplate_screw_hole: 2.2
   thumb_radius: 60
-  thumbfan_angle: 20
-  thumbfan_start_angle: 74
+  thumb_cluster_angle: 26
+  thumb_cluster_start_angle: 74
+  thumb_cluster_rotation: -80
+
 points:
   zones:
+    #   ----------------------- Key switches -----------------------
+
     # The primary 6x4 key matrix, plus 3 modifiers.
     matrix:
       # Choc spacing
@@ -31,21 +37,25 @@ points:
         tags: [switch]
         padding: 1ky
         spread: 1kx
+        height: 1ky
+        width: 1kx
       columns:
         outer2:
           rows.mod.skip: true
           rows.num.skip: true
         outer1:
-          rows.mod.skip: true
+          # rows.mod.skip: true
           rows.num.skip: true
         pinky:
-          # for pinky(and the two rows above, home position is actually the bottom row and the "num" row here is an extra row for ring finger)
+          # for pinky(and the two rows above, home position is actually the bottom row, and the "num" row here is an extra row for ring finger)
+          # rows.top.tags: [MX_switch]
         ring:
           key.stagger: 15 - ky
         middle:
           key.stagger: 4
         index:
           key.stagger: -7
+          rows.mod.skip: true
         inner:
           rows.mod.skip: true
           key.stagger: -3
@@ -55,7 +65,9 @@ points:
         bottom:
         home:
         top:
-        num:
+        num.key:
+          tags: [MX_switch]
+
     # Thumb cluster for Layer and Space keys.
     thumb_center:
       key.skip: true
@@ -63,42 +75,303 @@ points:
         ref: matrix_index_home
         shift: [3, -95]
 
-
-    thumbfan_inner:
-      # Choc spacing
+    thumb_cluster:
       key:
         tags: [switch]
-        padding: 1px
-        rotate: 90
-      # Place thumbs where the inner mod would go.
-      anchor:
-        ref: matrix_inner_mod
-        # orient: thumbfan_start_angle
-        # shift: [thumb_radius - 6, 0]
-
-    thumbfan_home:
-      key:
-        tags: [switch]
+        padding: kx
+        spread: ky
+        height: 1ky
+        width: 1kx
+        # rotate: -90
       anchor:
         ref: thumb_center
-        orient: thumbfan_start_angle - thumbfan_angle
-        shift: [thumb_radius, 0]
-        # rotate: 10
+        orient: thumb_cluster_start_angle - thumb_cluster_angle
+        shift: [thumb_radius - 0.5kx, ky]
+        rotate: thumb_cluster_rotation
+      columns:
+        inner:
+          rows.high.skip: true
+          rows.low:
+          key.rotate: 15
+          key.shift: [-2.5, -1]
+        home:
+          rows.high:
+            shift: [0.1kx, 0]
+            width: 1.6kx
+        outer:
+          rows.high.skip: true
+      rows:
+        low.key:
+          tags: [switch]
+        high.key:
+          tags: [MX_switch]
 
-    thumbfan_outer:
-      key:
-        tags: [switch]
-      anchor:
-        ref: thumb_center
-        orient: thumbfan_start_angle - 2*thumbfan_angle
-        shift: [thumb_radius, 0]
-        # rotate: 10
-    thumbfanfar:
-      key:
-        tags: [switch]
-      anchor:
-        ref: thumb_center
-        orient: thumbfan_start_angle - 3*thumbfan_angle
-        shift: [thumb_radius, 0]
-        # rotate: 10
+    #   ----------------------- Thumb cluster reference points, uncomment to see -----------------------
 
+    # thumb_outer_ref:
+    #   anchor:
+    #     ref: thumb_center
+    #     orient: thumb_cluster_start_angle - 40
+    #     shift: [thumb_radius, 0]
+    #
+    # thumb_home_ref:
+    #   anchor:
+    #     ref: thumb_center
+    #     orient: thumb_cluster_start_angle - 20
+    #     shift: [thumb_radius, 0]
+    #
+    # thumb_inner_ref:
+    #   anchor:
+    #     ref: thumb_center
+    #     orient: thumb_cluster_start_angle
+    #     shift: [thumb_radius, 0]
+    #
+    # scrollwheel_ref:
+    #   anchor:
+    #     ref: thumb_center
+    #     orient: thumb_cluster_start_angle + 20
+    #     shift: [thumb_radius, 0]
+
+    #   ----------------------- Scrollwheel, MCU, screws -----------------------
+
+    scrollwheel:
+      anchor:
+        ref: matrix_index_mod
+        orient: -90
+        # shift: [3, -0.5]
+      columns:
+        scrollwheel:
+          key:
+            tags: [scrollwheel]
+            column_net: row5
+            width: scrollwheel_width
+            height: scrollwheel_height
+      rows:
+        scrollwheel:
+          row_net: col4
+
+    mcu:
+      anchor:
+        ref: matrix_inner_num
+      columns:
+        mcu:
+          key:
+            tags: [mcu]
+            width: mcu_height
+            height: mcu_width
+            shift: [kx+mcu_padding, -mcu_width/2-0.5]
+            rotate: -90
+
+    screw_top_left:
+      key:
+        width: 4
+        height: 4
+      anchor:
+        ref.aggregate.parts:
+          [
+            matrix_outer2_home,
+            matrix_outer1_home,
+            matrix_outer2_top,
+            matrix_outer1_top,
+          ]
+
+    screw_bottom_left:
+      key:
+        width: 4
+        height: 4
+      anchor:
+        aggregate.parts:
+          [
+            matrix_pinky_bottom,
+            matrix_outer1_bottom,
+            matrix_pinky_mod,
+            matrix_outer1_mod,
+          ]
+      columns.screw.key.tags: [screw]
+
+    screw_top_middle:
+      key:
+        width: 4
+        height: 4
+      anchor:
+        aggregate.parts:
+          [matrix_ring_num, matrix_pinky_num, matrix_ring_top, matrix_pinky_top]
+      columns.screw.key.tags: [screw]
+
+    screw_bottom_middle:
+      key:
+        width: 4
+        height: 4
+      anchor:
+        aggregate.parts: [matrix_middle_bottom, matrix_middle_mod]
+        shift: [0.5kx, 0]
+      columns.screw.key.tags: [screw]
+
+    screw_top_right:
+      key:
+        width: 5
+        height: 5
+      anchor:
+        aggregate.parts:
+          [
+            matrix_index_num,
+            matrix_inner_num,
+            matrix_index_top,
+            matrix_inner_top,
+          ]
+      columns.screw.key.tags: [screw]
+
+    screw_bottom_right:
+      key:
+        width: 5
+        height: 5
+      anchor:
+        aggregate.parts: [thumb_cluster_inner_low, thumb_cluster_home_low]
+        shift: [0, 3]
+      columns.screw.key.tags: [screw]
+
+    thumb_home_high_ref:
+      key:
+        width: 1
+        height: 1
+      anchor:
+        ref: thumb_cluster_home_high
+        shift: [-1.5sx, sy]
+        rotate: -thumb_cluster_start_angle + thumb_cluster_angle - thumb_cluster_rotation
+
+outlines:
+
+  _key_outline:
+    - what: polygon
+      operation: stack
+      points:
+        - ref: matrix_outer2_top
+          shift: [-sx, sy]
+        - ref: matrix_outer2_bottom
+          shift: [-sx, -sy]
+        - ref: matrix_outer1_mod
+          shift: [-sx, -sy]
+        - ref: matrix_ring_mod
+          shift: [-sx, -sy]
+        - ref: matrix_ring_mod
+          shift: [sx, -sy]
+        - ref: thumb_cluster_home_low
+          shift: [-sx, -sy]
+        - ref: thumb_cluster_outer_low
+          shift: [sx, -sy]
+        - ref: thumb_cluster_outer_low
+          shift: [sx, sy]
+        - ref: thumb_cluster_home_high
+          shift: [1.5sx, sy]
+        # - ref: mcu_mcu
+        #   shift: [-0.5mcu_height - padding + 47.2, 0.5mcu_width + padding]
+        - ref: thumb_cluster_home_high
+          shift: [-1.5sx, sy]
+        - ref: matrix_inner_bottom
+          shift: [0.5kx+2, -sy]
+        - ref: matrix_inner_num
+          shift: [0.5kx+2, sy]
+        - ref: matrix_index_num
+          shift: [sx, sy]
+        - ref: matrix_middle_num
+          shift: [sx, sy]
+        - ref: matrix_middle_num
+          shift: [-sx, sy]
+        - ref: matrix_pinky_num
+          shift: [-sx, sy]
+
+  _thumb_high_polygon:
+    - what: polygon
+      points:
+        - ref: thumb_home_high_ref
+        - ref: thumb_home_high_ref
+          shift: [-1.5sx, 0]
+        - ref: thumb_home_high_ref
+          shift: [-1.5sx, -py]
+        - ref: thumb_home_high_ref
+          shift: [0, -py]
+
+  _thumb_hori_polygon:
+    - what: polygon
+      points:
+        - ref: thumb_home_high_ref
+        - ref: thumb_home_high_ref
+          shift: [1.5sx, 0]
+        - ref: thumb_home_high_ref
+          shift: [1.5sx, -py]
+        - ref: thumb_home_high_ref
+          shift: [0, -py]
+
+  _mcu_polygon:
+    - what: polygon
+      points:
+        - ref: matrix_inner_num
+          shift: [-sx, sy]
+        - ref: matrix_inner_num
+          shift: [sx, sy]
+        - ref: mcu_mcu
+          shift: [-0.5mcu_height - padding, 0.5mcu_width + padding]
+        - ref: mcu_mcu
+          shift: [0.5mcu_height + padding+2kx, 0.5mcu_width + padding]
+        - ref: matrix_inner_bottom
+          shift: [-sx, -sy]
+
+  _thumb_mcu_intersect:
+    - what: outline
+      name: _thumb_hori_polygon
+    - what: outline
+      name: _mcu_polygon
+      operation: intersect
+
+  _board_polygon:
+    - what: outline
+      name: _key_outline
+    - what: outline
+      name: _thumb_high_polygon
+      operation: add
+    - what: outline
+      name: _mcu_polygon
+      operation: add
+
+  board:
+    - what: outline
+      name: _board_polygon
+      fillet: 3
+
+  _switchplate_base:
+    - what: outline
+      name: _key_outline
+    - what: outline
+      name: _thumb_high_polygon
+      operation: add
+    - what: outline
+      name: _thumb_mcu_intersect
+      operation: add
+
+
+
+
+  _switch_cutout:
+    - what: rectangle
+      where: [switch]
+      size: switchplate_switch_cutout
+      bound: false
+  _scrollwheel_cutout:
+    - what: rectangle
+      where: [scrollwheel]
+      size: [switchplate_scrollwheel_cutout_x, switchplate_scrollwheel_cutout_y]
+      bound: false
+  _screw_holes:
+    - what: circle
+      where: [screw]
+      radius: 0.5switchplate_screw_hole
+  switchplate:
+    - what: outline
+      name: _switchplate_base
+      fillet: 3
+    - what: outline
+      name: _switch_cutout
+      operation: subtract
+    - what: outline
+      name: _scrollwheel_cutout
+      operation: subtract
