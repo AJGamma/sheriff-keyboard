@@ -12,11 +12,12 @@ units:
   mcu_padding: 1.5
   scrollwheel_width: 17
   scrollwheel_height: 14
-  screw_diameter: 4.7
-  screw_hole: 4.1
+  screw_diameter: 4
+  screw_hole: 3
   screen_screw_diameter: 4
   screen_screw_hole: 2.2
   switchplate_switch_cutout: 14
+  switchplate_switch_base_cutout: 16
   switchplate_scrollwheel_cutout_x: 17.5
   switchplate_scrollwheel_cutout_y: 14.5
   switchplate_screw_diameter: 3.3
@@ -33,6 +34,8 @@ points:
     # The primary 6x4 key matrix, plus 3 modifiers.
     matrix:
       # Choc spacing
+
+      anchor.shift: [50, -150]
       key:
         tags: [switch]
         padding: 1ky
@@ -41,32 +44,61 @@ points:
         width: 1kx
       columns:
         outer2:
-          rows.mod.skip: true
-          rows.num.skip: true
+          rows:
+            mod:
+              skip: true
+            bottom:
+              row_net: row2
+            home:
+              row_net: row1
+            top:
+              row_net: row0
+              tags: [switch_high]
+            num:
+              skip: true
+          key.column_net: col0
         outer1:
           # rows.mod.skip: true
           rows.num.skip: true
+          rows.top.tags: [switch_high]
+          key.column_net: col1
         pinky:
           # for pinky(and the two rows above, home position is actually the bottom row, and the "num" row here is an extra row for ring finger)
-          # rows.top.tags: [MX_switch]
+          rows.top.tags: [switch_high]
+          key.column_net: col2
         ring:
-          key.stagger: 15 - ky
+          key:
+            stagger: 15 - ky
+            column_net: col3
+
         middle:
-          key.stagger: 4
+          key:
+            stagger: 4
+            column_net: col4
+
         index:
-          key.stagger: -7
+          key:
+            stagger: -7
+            column_net: col5
           rows.mod.skip: true
         inner:
           rows.mod.skip: true
-          key.stagger: -3
+          key:
+            stagger: -3
+            column_net: col6
       rows:
         # Four main rows, one partial row.
         mod:
+          key.row_net: row4
         bottom:
+          key.row_net: row3
         home:
+          key.row_net: row2
         top:
-        num.key:
-          tags: [MX_switch]
+          key.row_net: row2
+        num:
+          key.row_net: row0
+          tags: [switch_high]
 
     # Thumb cluster for Layer and Space keys.
     thumb_center:
@@ -92,45 +124,56 @@ points:
         inner:
           rows.high.skip: true
           rows.low:
+            row_net: row4
+            column_net: col6
           key.rotate: 15
           key.shift: [-2.5, -1]
         home:
           rows.high:
+            column_net: col1
+            row_net: row0
             shift: [0.1kx, 0]
             width: 1.6kx
+          rows.low:
+            column_net: col0
+            row_net: row4
+
         outer:
           rows.high.skip: true
+          rows.low:
+            column_net: col0
+            row_net: row3
       rows:
-        low.key:
+        low:
           tags: [switch]
-        high.key:
-          tags: [MX_switch]
+        high:
+          tags: [thumb_switch_high]
 
     #   ----------------------- Thumb cluster reference points, uncomment to see -----------------------
 
-    # thumb_outer_ref:
-    #   anchor:
-    #     ref: thumb_center
-    #     orient: thumb_cluster_start_angle - 40
-    #     shift: [thumb_radius, 0]
-    #
-    # thumb_home_ref:
-    #   anchor:
-    #     ref: thumb_center
-    #     orient: thumb_cluster_start_angle - 20
-    #     shift: [thumb_radius, 0]
-    #
-    # thumb_inner_ref:
-    #   anchor:
-    #     ref: thumb_center
-    #     orient: thumb_cluster_start_angle
-    #     shift: [thumb_radius, 0]
-    #
-    # scrollwheel_ref:
-    #   anchor:
-    #     ref: thumb_center
-    #     orient: thumb_cluster_start_angle + 20
-    #     shift: [thumb_radius, 0]
+      # thumb_outer_ref:
+      #   anchor:
+      #     ref: thumb_center
+      #     orient: thumb_cluster_start_angle - 40
+      #     shift: [thumb_radius, 0]
+      #
+      # thumb_home_ref:
+      #   anchor:
+      #     ref: thumb_center
+      #     orient: thumb_cluster_start_angle - 20
+      #     shift: [thumb_radius, 0]
+      #
+      # thumb_inner_ref:
+      #   anchor:
+      #     ref: thumb_center
+      #     orient: thumb_cluster_start_angle
+      #     shift: [thumb_radius, 0]
+      #
+      # scrollwheel_ref:
+      #   anchor:
+      #     ref: thumb_center
+      #     orient: thumb_cluster_start_angle + 20
+      #     shift: [thumb_radius, 0]
 
     #   ----------------------- Scrollwheel, MCU, screws -----------------------
 
@@ -143,12 +186,12 @@ points:
         scrollwheel:
           key:
             tags: [scrollwheel]
-            column_net: row5
+            column_net: col5
             width: scrollwheel_width
             height: scrollwheel_height
       rows:
         scrollwheel:
-          row_net: col4
+          row_net: row4
 
     mcu:
       anchor:
@@ -159,7 +202,7 @@ points:
             tags: [mcu]
             width: mcu_height
             height: mcu_width
-            shift: [kx+mcu_padding, -mcu_width/2-0.5]
+            shift: [kx+mcu_padding + 1, -mcu_width/2 + 0.7]
             rotate: -90
 
     screw_top_left:
@@ -167,26 +210,19 @@ points:
         width: 4
         height: 4
       anchor:
-        ref.aggregate.parts:
-          [
-            matrix_outer2_home,
-            matrix_outer1_home,
-            matrix_outer2_top,
-            matrix_outer1_top,
-          ]
-
+        ref:
+          matrix_pinky_num
+        shift: [-0.8kx, -2]
+      columns.screw.key.tags: [screw]
+        
     screw_bottom_left:
       key:
         width: 4
         height: 4
       anchor:
-        aggregate.parts:
-          [
-            matrix_pinky_bottom,
-            matrix_outer1_bottom,
-            matrix_pinky_mod,
-            matrix_outer1_mod,
-          ]
+        ref:
+          matrix_outer1_mod
+        shift: [-0.8kx, 3]
       columns.screw.key.tags: [screw]
 
     screw_top_middle:
@@ -194,8 +230,8 @@ points:
         width: 4
         height: 4
       anchor:
-        aggregate.parts:
-          [matrix_ring_num, matrix_pinky_num, matrix_ring_top, matrix_pinky_top]
+        ref: matrix_ring_num
+        shift: [0, 0.5ky+2]
       columns.screw.key.tags: [screw]
 
     screw_bottom_middle:
@@ -203,8 +239,8 @@ points:
         width: 4
         height: 4
       anchor:
-        aggregate.parts: [matrix_middle_bottom, matrix_middle_mod]
-        shift: [0.5kx, 0]
+        ref: matrix_middle_mod
+        shift: [0, -0.5kx - 3]
       columns.screw.key.tags: [screw]
 
     screw_top_right:
@@ -212,22 +248,26 @@ points:
         width: 5
         height: 5
       anchor:
-        aggregate.parts:
-          [
-            matrix_index_num,
-            matrix_inner_num,
-            matrix_index_top,
-            matrix_inner_top,
-          ]
+        ref: matrix_index_num
+        shift: [0, 0.5ky+2]
       columns.screw.key.tags: [screw]
 
-    screw_bottom_right:
+    screw_thumb_left:
       key:
         width: 5
         height: 5
       anchor:
-        aggregate.parts: [thumb_cluster_inner_low, thumb_cluster_home_low]
-        shift: [0, 3]
+        ref: thumb_cluster_home_high
+        shift: [-0.5kx-2, 0]
+      columns.screw.key.tags: [screw]
+
+    screw_thumb_right:
+      key:
+        width: 5
+        height: 5
+      anchor:
+        ref: thumb_cluster_home_high
+        shift: [0.5kx+2, 0]
       columns.screw.key.tags: [screw]
 
     thumb_home_high_ref:
@@ -240,6 +280,11 @@ points:
         rotate: -thumb_cluster_start_angle + thumb_cluster_angle - thumb_cluster_rotation
 
 outlines:
+
+  _thumb_high_key_rectangle:
+    - what: rectangle
+      where: thumb_cluster_home_high
+      size: [1.5kx, 1ky]
 
   _key_outline:
     - what: polygon
@@ -279,6 +324,8 @@ outlines:
           shift: [-sx, sy]
         - ref: matrix_pinky_num
           shift: [-sx, sy]
+        - ref: matrix_pinky_num
+          shift: [-px, 0]
 
   _thumb_high_polygon:
     - what: polygon
@@ -310,9 +357,9 @@ outlines:
         - ref: matrix_inner_num
           shift: [sx, sy]
         - ref: mcu_mcu
-          shift: [-0.5mcu_height - padding, 0.5mcu_width + padding]
+          shift: [-0.5mcu_height - padding + 1.2, 0.5mcu_width + padding - 2]
         - ref: mcu_mcu
-          shift: [0.5mcu_height + padding+2kx, 0.5mcu_width + padding]
+          shift: [0.5mcu_height + padding+2kx, 0.5mcu_width + padding - 2]
         - ref: matrix_inner_bottom
           shift: [-sx, -sy]
 
@@ -348,12 +395,58 @@ outlines:
       name: _thumb_mcu_intersect
       operation: add
 
+  _high_switch_cutout:
+    - what: rectangle
+      where: [switch_high, thumb_switch_high]
+      size: switchplate_switch_cutout
+      bound: false
 
 
+  _high_switch_matrix_filter:
+    - what: rectangle
+      where: [switch_high]
+      size: [kx, 50]
+      bound: false
+      adjust:
+        shift: [0, 25-0.5ky]
+    - what: rectangle
+      where: matrix_outer2_top
+      size: [50, 50]
+      bound: false
+      operation: add
+      adjust:
+        shift: [-25+0.5kx, 25-0.5ky]
+    - what: rectangle
+      where: matrix_inner_num
+      size: [50, 50]
+      bound: false
+      operation: add
+      adjust:
+        shift: [25-0.5kx, 25-0.5ky]
+
+  _high_switch_thumb_filter:
+    - what: rectangle
+      where: [thumb_switch_high]
+      size: [50, 50]
+      adjust:
+        shift: [0, 25-0.5ky]
+    - what: rectangle
+      where: matrix_inner_bottom
+      size: [50, 50]
+      operation: intersect
+      adjust:
+        shift: [0.5kx+27, -sy]
+
+
+  _MX_switch_base_cutout:
+    - what: rectangle
+      where: [switch_high, thumb_switch_high]
+      size: switchplate_switch_base_cutout
+      bound: false
 
   _switch_cutout:
     - what: rectangle
-      where: [switch]
+      where: [switch, switch_high, thumb_switch_high]
       size: switchplate_switch_cutout
       bound: false
   _scrollwheel_cutout:
@@ -365,6 +458,55 @@ outlines:
     - what: circle
       where: [screw]
       radius: 0.5switchplate_screw_hole
+
+  MX_extra_switchplate_matrix:
+    - what: outline
+      name: _switchplate_base
+      fillet: 3
+    - what: outline
+      name: _high_switch_matrix_filter
+      operation: intersect
+    - what: outline
+      name: _high_switch_cutout
+      operation: subtract
+    - what: outline
+      name: _screw_holes
+      operation: subtract
+
+  MX_extra_switchplate_matrix_1mm_base:
+    - what: outline
+      name: MX_extra_switchplate_matrix
+    - what: outline
+      name: _MX_switch_base_cutout
+      operation: subtract
+
+  _MX_extra_switchplate_thumb_outline:
+    - what: outline
+      name: _switchplate_base
+    - what: outline
+      name: _high_switch_thumb_filter
+      operation: intersect
+
+      
+  MX_extra_switchplate_thumb: 
+    - what: outline
+      name: _MX_extra_switchplate_thumb_outline
+      fillet: 3
+    - what: outline
+      name: _high_switch_cutout
+      operation: subtract
+    - what: outline
+      name: _screw_holes
+      operation: subtract
+
+
+  MX_extra_switchplate_thumb_1mm_base: 
+    - what: outline
+      name: MX_extra_switchplate_thumb
+    - what: outline
+      name: _MX_switch_base_cutout
+      operation: subtract
+
   switchplate:
     - what: outline
       name: _switchplate_base
@@ -375,3 +517,459 @@ outlines:
     - what: outline
       name: _scrollwheel_cutout
       operation: subtract
+    - what: outline
+      name: _screw_holes
+      operation: subtract
+    - what: outline
+      name: _MX_switch_base_cutout
+      operation: subtract
+
+
+
+  case:
+    - what: outline
+      name: board
+      fillet: 3
+    - what: outline
+      name: _screw_holes
+      operation: subtract
+
+pcbs:
+  keyboard:
+    outlines:
+      - outline: board
+        layer: Edge.Cuts
+      - outline: switchplate
+        layer: User.Comments
+      - outline: _thumb_high_key_rectangle
+        layer: User.Comments
+
+    footprints:
+      ks33_hotswap:
+        what: ks33
+        where: [switch]
+        params:
+          hotswap: true
+          reversible: true
+          include_keycap: true
+          from: "{{column_net}}"
+          to: "{{colrow}}"
+      mx_hotswap:
+        what: mx
+        where: [switch_high, thumb_switch_high]
+        params: 
+          reverse: true
+          hotswap: true
+          keycaps: true
+          from: "{{column_net}}"
+          to: "{{colrow}}"
+      diode_gateron:
+        what: diode
+        where: [switch]
+        params:
+          from: "{{colrow}}"
+          to: "{{row_net}}"
+        adjust:
+          shift: [-6, 0]
+          rotate: 90
+      diode_mx:
+        what: diode
+        where: [switch_high, thumb_switch_high]
+        params:
+          from: "{{colrow}}"
+          to: "{{row_net}}"
+        adjust:
+          rotate: 0
+          shift: [0, -6]
+      scrollwheel:
+        what: scrollwheel_mirrored
+        where: [scrollwheel]
+        params:
+          from: "{{column_net}}"
+          to: "{{colrow}}"
+          A: ENCB_undef
+          B: GND_ENCA
+          C: ENCA_GND
+          D: undef_ENCB
+      scroll_diode:
+        what: diode
+        where: [scrollwheel]
+        params:
+          from: "{{colrow}}"
+          to: "{{row_net}}"
+        adjust:
+          shift: [-5, -9]
+      jumper_sw_left_a:
+        what: jumper
+        where: [scrollwheel]
+        params:
+          side: B  
+          to: ENCB_undef
+          from: ENCB
+        adjust:
+          rotate: 90
+          shift: [-3, 3.81]
+      jumper_sw_left_gnd:
+        what: jumper
+        where: [scrollwheel]
+        params:
+          side: B  
+          to: GND_ENCA
+          from: GND
+        adjust:
+          rotate: 90
+          shift: [-3, 1.27]
+      jumper_sw_left_ENCA:
+        what: jumper
+        where: [scrollwheel]
+        params:
+          side: B  
+          to: ENCA_GND
+          from: ENCA
+        adjust:
+          rotate: 90
+          shift: [-3, -1.27]
+      jumper_sw_right_a:
+        what: jumper
+        where: [scrollwheel]
+        params:
+          side: F  
+          to: undef_ENCB
+          from: ENCB
+        adjust:
+          rotate: 90
+          shift: [-3, -3.81]
+      jumper_sw_right_gnd:
+        what: jumper
+        where: [scrollwheel]
+        params:
+          side: F  
+          to: ENCA_GND
+          from: GND
+        adjust:
+          rotate: 90
+          shift: [-3, -1.27]
+      jumper_sw_right_ENCA:
+        what: jumper
+        where: [scrollwheel]
+        params:
+          side: F  
+          to: GND_ENCA
+          from: ENCA
+        adjust:
+          rotate: 90
+          shift: [-3, 1.27]
+
+
+      # MCU
+      nicenano:
+        what: nicenano
+        where: mcu
+        params:
+          orientation: down
+          RAW: RAW_col6
+          GND1: GND_P0
+          RST: RST_GND
+          VCC: VCC_GND 
+          P21: ENCA
+          P20: ENCB
+          P19: col0
+          P18: col1
+          P15: col2
+          P14: col3
+          P16: col4
+          P10: col5
+          P1: col6_RAW
+          P0: P0_GND
+          GND2: GND_RST
+          GND3: GND_VCC
+          P2: SDA
+          P3: SCL
+          P4: CS
+          P5: row0
+          P6: row1
+          P7: row2
+          P8: row3
+          P9: row4
+      jumper_left_p1:
+        what: jumper
+        where: mcu
+        params:
+          from: col6_RAW
+          to: col6
+          side: B
+        adjust:
+          shift: [-11.45, 2.5]
+      jumper_left_raw:
+        what: jumper
+        where: mcu
+        params:
+          from: RAW
+          to: RAW_col6
+          side: B
+        adjust:
+          shift: [-11.45, -2.5]
+          rotate: 180
+      jumper_left_rst:
+        what: jumper
+        where: mcu
+        params:
+          from: RST
+          to: RST_GND
+          side: B
+        adjust:
+          shift: [-8.9, -2.5]
+          rotate: 180
+      jumper_left_vcc:
+        what: jumper
+        where: mcu
+        params:
+          from: VCC
+          to: VCC_GND
+          side: B
+        adjust:
+          shift: [-6.35, -2.5]
+          rotate: 180
+      jumper_left_gnd:
+        what: jumper
+        where: mcu
+        params:
+          from: GND
+          to: GND_RST
+          side: B
+        adjust:
+          shift: [-8.9, 2.5]
+      jumper_right_p1:
+        what: jumper
+        where: mcu
+        params:
+          from: RAW_col6 
+          to: col6
+          side: F
+        adjust:
+          shift: [-11.45, -2.5]
+          rotate: 180
+      jumper_right_raw:
+        what: jumper
+        where: mcu
+        params:
+          from: RAW
+          to: col6_RAW
+          side: F
+        adjust:
+          shift: [-11.45, 2.5]
+      jumper_right_rst:
+        what: jumper
+        where: mcu
+        params:
+          from: RST
+          to: GND_RST
+          side: F
+        adjust:
+          shift: [-8.9, 2.5]
+      jumper_right_vcc:
+        what: jumper
+        where: mcu
+        params:
+          from: VCC
+          to: GND_VCC
+          side: F
+        adjust:
+          shift: [-6.35, 2.5]
+      jumper_right_gnd:
+        what: jumper
+        where: mcu
+        params:
+          from: GND
+          to: RST_GND
+          side: F
+        adjust:
+          shift: [-8.9, -2.5]
+          rotate: 180
+      niceview:
+        what: niceview
+        where: mcu
+        adjust:
+          shift: [20.5, 0]
+          rotate: 180
+        params:
+          outline: true
+          side: 'F'
+          SDA: NN_SDA_CS
+          SCL: NN_SCL_GND
+          VCC: NN_VCC
+          GND: NN_GND_SCL
+          CS: NN_CS_SDA
+      jumper_nv_left_sda:
+        what: jumper
+        where: mcu
+        params:
+          from: SDA
+          to: NN_SDA_CS
+          side: B
+        adjust:
+          shift: [20.50-2.5, -5.08]
+          rotate: -90
+      jumper_nv_left_scl:
+        what: jumper
+        where: mcu
+        params:
+          from: SCL
+          to: NN_SCL_GND
+          side: B
+        adjust:
+          shift: [20.50-2.5, -2.54]
+          rotate: -90
+      jumper_nv_left_vcc:
+        what: jumper
+        where: mcu
+        params:
+          from: VCC
+          to: NN_VCC
+          side: B
+        adjust:
+          shift: [20.50-2.5, 0]
+          rotate: -90
+      jumper_nv_left_gnd:
+        what: jumper
+        where: mcu
+        params:
+          from: GND
+          to: NN_GND_SCL
+          side: B
+        adjust:
+          shift: [20.50-2.5, 2.54]
+          rotate: -90
+      jumper_nv_left_cs:
+        what: jumper
+        where: mcu
+        params:
+          from: CS
+          to: NN_CS_SDA
+          side: B
+        adjust:
+          shift: [20.50-2.5, 5.08]
+          rotate: -90
+      jumper_nv_right_sda:
+        what: jumper
+        where: mcu
+        params:
+          from: SDA
+          to: NN_CS_SDA
+          side: F
+        adjust:
+          shift: [20.50-2.5, 5.08]
+          rotate: -90
+      jumper_nv_right_scl:
+        what: jumper
+        where: mcu
+        params:
+          from: SCL
+          to: NN_GND_SCL
+          side: F
+        adjust:
+          shift: [20.50-2.5, 2.54]
+          rotate: -90
+      jumper_nv_right_vcc:
+        what: jumper
+        where: mcu
+        params:
+          from: VCC
+          to: NN_VCC
+          side: F
+        adjust:
+          shift: [20.50-2.5, 0]
+          rotate: -90
+      jumper_nv_right_gnd:
+        what: jumper
+        where: mcu
+        params:
+          from: GND
+          to: NN_SCL_GND
+          side: F
+        adjust:
+          shift: [20.50-2.5, -2.54]
+          rotate: -90
+      jumper_nv_right_cs:
+        what: jumper
+        where: mcu
+        params:
+          from: CS
+          to: NN_SDA_CS
+          side: F
+        adjust:
+          shift: [20.50-2.5, -5.08]
+          rotate: -90
+
+      slider:
+        what: slider_reversible
+        where: mcu
+        adjust:
+          shift: [-17.1, 0]
+          rotate: 90
+        params:
+          side: F
+          reverse: true
+          from: switch_from
+          to: RAW
+
+      battery:
+        what: battery
+        where: mcu
+        adjust:
+          shift: [-17, 0]
+        params:
+          RAW: switch_from
+      reset:
+        what: reset
+        where: mcu
+        params:
+          from: GND
+          to: RST
+        adjust:
+          shift: [10+mcu_height/2, 0]
+          rotate: -90
+      plexi_inner:
+        what: hole
+        where: mcu
+        params:
+          size: screen_screw_diameter
+          drill: screen_screw_hole
+        adjust:
+          shift: [10+mcu_height/2, -mcu_width/2+1.5]
+      plexi_outer:
+        what: hole
+        where: mcu
+        params:
+          size: screen_screw_diameter
+          drill: screen_screw_hole
+        adjust:
+          shift: [10+mcu_height/2, mcu_width/2-1.5]
+      screw_holes:
+        what: hole
+        where: [screw]
+        params:
+          size: screw_diameter
+          drill: screw_hole
+      name_text_back:
+        what: text
+        where: mcu
+        params:
+          text: "Sheriff v0.7"
+          fontsize: 1.2
+          side: B
+        adjust:
+          rotate: 0
+          shift: [14+0.5*mcu_height, 0]
+      name_text:
+        what: text
+        where: mcu
+        params:
+          text: "Sheriff v0.7"
+          fontsize: 1.2
+        adjust:
+          rotate: 0
+          shift: [14+0.5*mcu_height, 0]
+
+
+
