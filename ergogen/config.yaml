@@ -13,7 +13,7 @@ units:
   scrollwheel_width: 17
   scrollwheel_height: 14
   screw_diameter: 4
-  screw_hole: 3
+  screw_hole: 2
   screen_screw_diameter: 4
   screen_screw_hole: 2.2
   switchplate_switch_cutout: 14
@@ -22,10 +22,33 @@ units:
   switchplate_scrollwheel_cutout_y: 14.5
   switchplate_screw_diameter: 3.3
   switchplate_screw_hole: 2.2
+
+  pcb_thickness: 1.6
+
   thumb_radius: 60
   thumb_cluster_angle: 26
   thumb_cluster_start_angle: 74
   thumb_cluster_rotation: -80
+
+  case_screw_hole: 1.6
+  case_screw_insert_diameter: 3
+  case_standoff_diameter: 4
+
+  case_base_thickness: 2.5
+  case_support_height: 2
+  case_wall_thickness: 2
+  case_wall_height: 5
+
+  usb_width: 10
+  usb_height: 20
+  usb_fillet: 2
+
+  trrs_width: 6
+  trrs_height: 20
+  trrs_radius: 2.5
+
+  footpad_diameter: 11
+  footpad_slot_depth: 0.3
 
 points:
   zones:
@@ -89,15 +112,15 @@ points:
       rows:
         # Four main rows, one partial row.
         mod:
-          key.row_net: row4
+          row_net: row4
         bottom:
-          key.row_net: row3
+          row_net: row3
         home:
-          key.row_net: row2
+          row_net: row2
         top:
-          key.row_net: row2
+          row_net: row2
         num:
-          key.row_net: row0
+          row_net: row0
           tags: [switch_high]
 
     # Thumb cluster for Layer and Space keys.
@@ -175,7 +198,7 @@ points:
       #     orient: thumb_cluster_start_angle + 20
       #     shift: [thumb_radius, 0]
 
-    #   ----------------------- Scrollwheel, MCU, screws -----------------------
+    #   ----------------------- Scrollwheel, MCU, screws, footpads -----------------------
 
     scrollwheel:
       anchor:
@@ -278,6 +301,72 @@ points:
         ref: thumb_cluster_home_high
         shift: [-1.5sx, sy]
         rotate: -thumb_cluster_start_angle + thumb_cluster_angle - thumb_cluster_rotation
+
+    trrs_ref_point:
+      key:
+        width: 1
+        height: 4
+      anchor:
+        ref: mcu_mcu
+        shift: [mcu_height/2+3, 11]
+
+    footpad_top_left:
+      key:
+        width: footpad_diameter
+        height: footpad_diameter
+      anchor:
+        ref: matrix_outer2_top
+        shift: [-0.5kx+0.5footpad_diameter, 0.5ky-0.5footpad_diameter]
+      columns.footpad.key.tags: [silicon_footpad]
+
+    footpad_bottom_left:
+      key:
+        width: footpad_diameter
+        height: footpad_diameter
+      anchor:
+        ref: matrix_outer2_bottom
+        shift: [-0.5kx+0.5footpad_diameter, -0.5ky+0.5footpad_diameter]
+      columns.footpad.key.tags: [silicon_footpad]
+
+    footpad_bottom_middle:
+      key:
+        width: footpad_diameter
+        height: footpad_diameter
+      anchor:
+        ref: matrix_middle_mod
+      columns.footpad.key.tags: [silicon_footpad]
+
+    footpad_top_middle:
+      key:
+        width: footpad_diameter
+        height: footpad_diameter
+      anchor:
+        ref: matrix_ring_num
+      columns.footpad.key.tags: [silicon_footpad]
+
+    footpad_top_right:
+      key:
+        width: footpad_diameter
+        height: footpad_diameter
+      anchor:
+        - ref: mcu_mcu
+          shift: [0, 0.5*mcu_width - 0.5*footpad_diameter]
+        - ref: footpad_top_left_footpad
+          shift: [0, footpad_diameter]
+          affect: y
+      columns.footpad.key.tags: [right_footpad]
+
+    footpad_bottom_right:
+      key:
+        width: footpad_diameter
+        height: footpad_diameter
+      anchor:
+        - ref: mcu_mcu
+          shift: [0, 0.5*mcu_width - 0.5*footpad_diameter]
+        - ref: thumb_cluster_home_low
+          affect: y
+      columns.footpad.key.tags: [right_footpad]
+
 
 outlines:
 
@@ -524,15 +613,65 @@ outlines:
       name: _MX_switch_base_cutout
       operation: subtract
 
-
-
-  case:
+  case_base:
     - what: outline
       name: board
-      fillet: 3
     - what: outline
       name: _screw_holes
       operation: subtract
+
+  _case_wall_perimeter:
+    - what: outline
+      name: board
+      expand: case_wall_thickness
+
+  _case_standoff_outline:
+    - what: circle
+      where: [screw]
+      radius: 0.5case_standoff_diameter
+
+  _case_screw_inserts_outline:
+    - what: circle
+      where: [screw]
+      radius: 0.5 * case_screw_insert_diameter
+
+  case_wall_outline:
+    - what: outline
+      name: _case_wall_perimeter
+    - what: outline
+      name: board
+      operation: subtract
+
+  _usb_wall_cutout_rectangle:
+    - what: rectangle
+      where: mcu
+      size: [usb_height, usb_width]
+      adjust:
+        shift: [-0.5*mcu_height, 0]
+      bound: false
+
+  _trrs_cutout_rectangle:
+    - what: rectangle
+      where: trrs_ref_point
+      size: [trrs_width, trrs_height]
+      bound: false
+    
+  _usb_wall_cutout_outline:
+    - what: outline
+      name: _usb_wall_cutout_rectangle
+      fillet: usb_fillet
+
+  trrs_cutout_outline:
+    - what: outline
+      name: _trrs_cutout_rectangle
+      # 0.5 doesn't work for some reason
+      fillet: 0.49*trrs_width
+
+  _left_footpad_cutout_outline:
+    - what: circle
+      where: [silicon_footpad]
+      radius: 0.5footpad_diameter
+
 
 pcbs:
   keyboard:
@@ -541,8 +680,8 @@ pcbs:
         layer: Edge.Cuts
       - outline: switchplate
         layer: User.Comments
-      - outline: _thumb_high_key_rectangle
-        layer: User.Comments
+      # - outline: _thumb_high_key_rectangle
+      #   layer: User.Comments
 
     footprints:
       ks33_hotswap:
@@ -660,55 +799,72 @@ pcbs:
           rotate: 90
           shift: [-3, 1.27]
 
-
       # MCU
-      nicenano:
-        what: nicenano
+      promicro:
+        what: promicro
         where: mcu
         params:
-          orientation: down
-          RAW: RAW_col6
-          GND1: GND_P0
+          orientation: up
+          RAW: RAW_P1
+          GND1: GND_serial
           RST: RST_GND
           VCC: VCC_GND 
           P21: ENCA
-          P20: ENCB
-          P19: col0
-          P18: col1
-          P15: col2
-          P14: col3
-          P16: col4
-          P10: col5
-          P1: col6_RAW
-          P0: P0_GND
+          P20: col0
+          P19: col1
+          P18: col2
+          P15: col3
+          P14: col4
+          P16: col5
+          P10: col6
+          P1: P1_RAW
+          P0: serial_GND
           GND2: GND_RST
           GND3: GND_VCC
-          P2: SDA
-          P3: SCL
-          P4: CS
+          P2: ENCB
           P5: row0
           P6: row1
           P7: row2
           P8: row3
           P9: row4
-      jumper_left_p1:
+
+      jumper_left_gnd1:
         what: jumper
         where: mcu
         params:
-          from: col6_RAW
-          to: col6
+          from: GND
+          to: GND_serial
           side: B
         adjust:
-          shift: [-11.45, 2.5]
+          shift: [-11.45, 4.6]
+      jumper_left_serial:
+        what: jumper
+        where: mcu
+        params:
+          from: serial
+          to: serial_GND
+          side: B
+        adjust:
+          shift: [-11.45, -4.6]
+          rotate: 180
       jumper_left_raw:
         what: jumper
         where: mcu
         params:
           from: RAW
-          to: RAW_col6
+          to: RAW_P1
           side: B
         adjust:
-          shift: [-11.45, -2.5]
+          shift: [-14, 4.6]
+      jumper_left_gnd:
+        what: jumper
+        where: mcu
+        params:
+          from: GND
+          to: GND_RST
+          side: B
+        adjust:
+          shift: [-8.9, -4.6]
           rotate: 180
       jumper_left_rst:
         what: jumper
@@ -718,8 +874,7 @@ pcbs:
           to: RST_GND
           side: B
         adjust:
-          shift: [-8.9, -2.5]
-          rotate: 180
+          shift: [-8.9, 4.6]
       jumper_left_vcc:
         what: jumper
         where: mcu
@@ -728,36 +883,47 @@ pcbs:
           to: VCC_GND
           side: B
         adjust:
-          shift: [-6.35, -2.5]
+          shift: [-6.35, 4.6]
+
+      jumper_right_vcc:
+        what: jumper
+        where: mcu
+        params:
+          from: VCC
+          to: GND_VCC
+          side: B
+        adjust:
+          shift: [-6.35, -4.6]
           rotate: 180
-      jumper_left_gnd:
+      jumper_right_gnd1:
         what: jumper
         where: mcu
         params:
           from: GND
-          to: GND_RST
-          side: B
+          to: serial_GND
+          side: F
         adjust:
-          shift: [-8.9, 2.5]
-      jumper_right_p1:
+          shift: [-11.45, -4.6]
+          rotate: 180
+      jumper_right_serial:
         what: jumper
         where: mcu
         params:
-          from: RAW_col6 
-          to: col6
+          from: serial
+          to: GND_serial
           side: F
         adjust:
-          shift: [-11.45, -2.5]
-          rotate: 180
+          shift: [-11.45, 4.6]
       jumper_right_raw:
         what: jumper
         where: mcu
         params:
           from: RAW
-          to: col6_RAW
+          to: P1_RAW
           side: F
         adjust:
-          shift: [-11.45, 2.5]
+          shift: [-14, -4.6]
+          rotate: 180
       jumper_right_rst:
         what: jumper
         where: mcu
@@ -766,16 +932,8 @@ pcbs:
           to: GND_RST
           side: F
         adjust:
-          shift: [-8.9, 2.5]
-      jumper_right_vcc:
-        what: jumper
-        where: mcu
-        params:
-          from: VCC
-          to: GND_VCC
-          side: F
-        adjust:
-          shift: [-6.35, 2.5]
+          shift: [-8.9, -4.6]
+          rotate: 180
       jumper_right_gnd:
         what: jumper
         where: mcu
@@ -784,122 +942,7 @@ pcbs:
           to: RST_GND
           side: F
         adjust:
-          shift: [-8.9, -2.5]
-          rotate: 180
-      niceview:
-        what: niceview
-        where: mcu
-        adjust:
-          shift: [20.5, 0]
-          rotate: 180
-        params:
-          outline: true
-          side: 'F'
-          SDA: NN_SDA_CS
-          SCL: NN_SCL_GND
-          VCC: NN_VCC
-          GND: NN_GND_SCL
-          CS: NN_CS_SDA
-      jumper_nv_left_sda:
-        what: jumper
-        where: mcu
-        params:
-          from: SDA
-          to: NN_SDA_CS
-          side: B
-        adjust:
-          shift: [20.50-2.5, -5.08]
-          rotate: -90
-      jumper_nv_left_scl:
-        what: jumper
-        where: mcu
-        params:
-          from: SCL
-          to: NN_SCL_GND
-          side: B
-        adjust:
-          shift: [20.50-2.5, -2.54]
-          rotate: -90
-      jumper_nv_left_vcc:
-        what: jumper
-        where: mcu
-        params:
-          from: VCC
-          to: NN_VCC
-          side: B
-        adjust:
-          shift: [20.50-2.5, 0]
-          rotate: -90
-      jumper_nv_left_gnd:
-        what: jumper
-        where: mcu
-        params:
-          from: GND
-          to: NN_GND_SCL
-          side: B
-        adjust:
-          shift: [20.50-2.5, 2.54]
-          rotate: -90
-      jumper_nv_left_cs:
-        what: jumper
-        where: mcu
-        params:
-          from: CS
-          to: NN_CS_SDA
-          side: B
-        adjust:
-          shift: [20.50-2.5, 5.08]
-          rotate: -90
-      jumper_nv_right_sda:
-        what: jumper
-        where: mcu
-        params:
-          from: SDA
-          to: NN_CS_SDA
-          side: F
-        adjust:
-          shift: [20.50-2.5, 5.08]
-          rotate: -90
-      jumper_nv_right_scl:
-        what: jumper
-        where: mcu
-        params:
-          from: SCL
-          to: NN_GND_SCL
-          side: F
-        adjust:
-          shift: [20.50-2.5, 2.54]
-          rotate: -90
-      jumper_nv_right_vcc:
-        what: jumper
-        where: mcu
-        params:
-          from: VCC
-          to: NN_VCC
-          side: F
-        adjust:
-          shift: [20.50-2.5, 0]
-          rotate: -90
-      jumper_nv_right_gnd:
-        what: jumper
-        where: mcu
-        params:
-          from: GND
-          to: NN_SCL_GND
-          side: F
-        adjust:
-          shift: [20.50-2.5, -2.54]
-          rotate: -90
-      jumper_nv_right_cs:
-        what: jumper
-        where: mcu
-        params:
-          from: CS
-          to: NN_SDA_CS
-          side: F
-        adjust:
-          shift: [20.50-2.5, -5.08]
-          rotate: -90
+          shift: [-8.9, 4.6]
 
       slider:
         what: slider_reversible
@@ -913,6 +956,16 @@ pcbs:
           from: switch_from
           to: RAW
 
+      trrs:
+        what: trrs_pj320a
+        params:
+          reversible: true
+          symmetric: true
+          TP: GND
+          R1: GND
+          R2: serial
+          SL: VCC
+        where: trrs_ref_point
       battery:
         what: battery
         where: mcu
@@ -927,8 +980,8 @@ pcbs:
           from: GND
           to: RST
         adjust:
-          shift: [10+mcu_height/2, 0]
-          rotate: -90
+          shift: [3+mcu_height/2, -7]
+          rotate: 0
       plexi_inner:
         what: hole
         where: mcu
@@ -971,5 +1024,62 @@ pcbs:
           rotate: 0
           shift: [14+0.5*mcu_height, 0]
 
+cases:
+  _usb_wall_cutout:
+    - name: _usb_wall_cutout_outline 
+      extrude: mcu_height
+      shift: [0, 0, 0.5usb_height + case_base_thickness + 1]
+      rotate: [270, 0, 0]
+
+  _trrs_cutout:
+    - name: trrs_cutout_outline
+      extrude: mcu_height
+      shift: [0, 0, 0.5trrs_height + case_base_thickness + case_support_height + pcb_thickness + trrs_radius - 0.5*trrs_width]
+      rotate: [0, 90, 0]
+
+  _case_wall:
+    - name: case_wall_outline
+      extrude: case_base_thickness + case_support_height + case_wall_height
+
+
+  _case_standoff:
+    - name: _case_standoff_outline
+      extrude: case_base_thickness + case_support_height
+
+  _case_screw_inserts:
+    - name: _case_screw_inserts_outline
+      extrude: case_base_thickness + case_support_height
+
+  _case_base:
+    - name: board
+      extrude: case_base_thickness
+
+  _case_footpad_left:
+    - name: _left_footpad_cutout_outline
+      extrude: footpad_slot_depth
+
+
+  case:
+    - what: case
+      name: _case_base
+      operation: add
+    - what: case
+      name: _case_wall
+      operation: add
+    - what: case
+      name: _case_footpad_left
+      operation: subtract
+    - what: case
+      name: _usb_wall_cutout
+      operation: subtract
+    - what: case
+      name: _trrs_cutout
+      operation: subtract
+    - what: case
+      name: _case_standoff
+      operation: add
+    - what: case
+      name: _case_screw_inserts
+      operation: subtract
 
 
