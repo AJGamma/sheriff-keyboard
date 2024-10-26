@@ -118,7 +118,7 @@ points:
         home:
           row_net: row2
         top:
-          row_net: row2
+          row_net: row1
         num:
           row_net: row0
           tags: [switch_high]
@@ -688,38 +688,45 @@ pcbs:
         what: ks33
         where: [switch]
         params:
+          solder: false
           hotswap: true
           reversible: true
           include_keycap: true
           from: "{{column_net}}"
           to: "{{colrow}}"
       mx_hotswap:
-        what: mx
+        what: switch_mx
         where: [switch_high, thumb_switch_high]
         params: 
-          reverse: true
+          reversible: true
           hotswap: true
-          keycaps: true
-          from: "{{column_net}}"
-          to: "{{colrow}}"
+          solder: false
+          include_keycap: true
+          to: "{{column_net}}"
+          from: "{{colrow}}"
       diode_gateron:
-        what: diode
+        what: diode_tht_sod123
         where: [switch]
         params:
           from: "{{colrow}}"
           to: "{{row_net}}"
+          reversible: true
+          include_tht: false
         adjust:
-          shift: [-6, 0]
-          rotate: 90
+          shift: [6, 0]
+          rotate: -90
       diode_mx:
-        what: diode
+        what: diode_tht_sod123
         where: [switch_high, thumb_switch_high]
         params:
           from: "{{colrow}}"
           to: "{{row_net}}"
+          reversible: true
+          include_tht: false
         adjust:
-          rotate: 0
-          shift: [0, -6]
+          rotate: 90
+          shift: [6, -4]
+
       scrollwheel:
         what: scrollwheel_mirrored
         where: [scrollwheel]
@@ -981,7 +988,7 @@ pcbs:
           to: RST
         adjust:
           shift: [3+mcu_height/2, -7]
-          rotate: 0
+          rotate: 180
       plexi_inner:
         what: hole
         where: mcu

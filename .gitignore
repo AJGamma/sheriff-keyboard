@@ -1,2 +1,8 @@
 ergogen/output/
 .DS_Store
+*.gbr
+*.gbrjob
+*.kicad_pcb.lck
+*.kicad_pro
+*.kicad_prl
+*report.txt
