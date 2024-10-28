@@ -37,7 +37,7 @@ units:
   case_base_thickness: 3
   case_support_height: 2
   case_wall_thickness: 2
-  case_wall_height: 5
+  case_wall_height: 6
   case_wall_margin: 0.2     # Margin between the wall and the board
 
   usb_width: 10
@@ -57,6 +57,7 @@ units:
   tenting_mount_hole_diameter: 5
   tenting_mount_perimeter_diameter: 12
   tenting_mount_thickness: 5
+  tenting_mount_lift_height: 5
 
 points:
   zones:
@@ -1273,6 +1274,81 @@ cases:
   tented_case_with_footpads:
     - what: case
       name: tented_case
+      operation: add
+    - what: case
+      name: _case_footpad_left
+      operation: subtract
+    - what: case
+      name: _case_footpad_right
+      operation: subtract
+
+  lifted_tented_case:
+    - what: outline
+      name: _tented_case_base
+      extrude: tenting_mount_thickness
+      shift: [0, 0, tenting_mount_lift_height]
+    - what: outline
+      name: _case_base_board 
+      extrude: 100
+      operation: subtract
+    - what: outline
+      name: _case_base_board 
+      extrude: case_base_thickness
+      operation: add
+    - what: case
+      name: _case_wall
+      operation: add
+    - what: case
+      name: _usb_wall_cutout
+      operation: subtract
+    - what: case
+      name: _trrs_cutout
+      operation: subtract
+    - what: case
+      name: _case_standoff
+      operation: add
+    - what: case
+      name: _case_screw_inserts
+      operation: subtract
+
+  lifted_single_sided_tented_case:
+    - what: outline
+      name: _single_sided_tented_case_base
+      extrude: tenting_mount_thickness
+      shift: [0, 0, tenting_mount_lift_height]
+    - what: outline
+      name: _case_base_board 
+      extrude: 100
+      operation: subtract
+    - what: outline
+      name: _case_base_board 
+      extrude: case_base_thickness
+      operation: add
+    - what: case
+      name: _case_wall
+      operation: add
+    - what: case
+      name: _usb_wall_cutout
+      operation: subtract
+    - what: case
+      name: _trrs_cutout
+      operation: subtract
+    - what: case
+      name: _case_standoff
+      operation: add
+    - what: case
+      name: _case_screw_inserts
+      operation: subtract
+    - what: case
+      name: _case_footpad_left
+      operation: subtract
+    - what: case
+      name: _case_footpad_right
+      operation: subtract
+
+  lifted_tented_case_with_footpads:
+    - what: case
+      name: lifted_tented_case
       operation: add
     - what: case
       name: _case_footpad_left
