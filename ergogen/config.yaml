@@ -32,12 +32,13 @@ units:
 
   case_screw_hole: 1.6
   case_screw_insert_diameter: 3
-  case_standoff_diameter: 4
+  case_standoff_diameter: 6
 
-  case_base_thickness: 2.5
+  case_base_thickness: 3
   case_support_height: 2
   case_wall_thickness: 2
-  case_wall_height: 5
+  case_wall_height: 6
+  case_wall_margin: 0.2     # Margin between the wall and the board
 
   usb_width: 10
   usb_height: 20
@@ -48,7 +49,15 @@ units:
   trrs_radius: 2.5
 
   footpad_diameter: 11
-  footpad_slot_depth: 0.3
+  footpad_slot_depth: 0.4
+
+  foot_rack_width: 60
+  foot_rack_height: 30
+
+  tenting_mount_hole_diameter: 5
+  tenting_mount_perimeter_diameter: 12
+  tenting_mount_thickness: 5
+  tenting_mount_lift_height: 5
 
 points:
   zones:
@@ -367,7 +376,45 @@ points:
           affect: y
       columns.footpad.key.tags: [right_footpad]
 
+    tenting_mount_top_right:
+      key:
+        width: tenting_mount_perimeter_diameter
+        height: tenting_mount_perimeter_diameter
+      anchor:
+        - ref: matrix_inner_num
+          # shift: [0, 0.5ky + 2]
+          affect: [y, r]
+        - ref: mcu_mcu
+          shift: [0.5mcu_height + padding+2kx, 0.5mcu_width + padding - 2 + case_wall_margin + case_wall_thickness + 0.5 * tenting_mount_perimeter_diameter - 0.3]
+          affect: x
+      columns.tenting_mount.key.tags: [tenting_mount, tenting_mount_right]
 
+    tenting_mount_bottom_right:
+      key:
+        width: tenting_mount_perimeter_diameter
+        height: tenting_mount_perimeter_diameter
+      anchor:
+        - ref: thumb_cluster_outer_low
+          shift: [sx + case_wall_margin + case_wall_thickness + 0.5 * tenting_mount_perimeter_diameter - 0.3, 0]
+      columns.tenting_mount.key.tags: [tenting_mount, tenting_mount_right]
+
+    tenting_mount_top_left:
+      key:
+        width: tenting_mount_perimeter_diameter
+        height: tenting_mount_perimeter_diameter
+      anchor:
+        - ref: matrix_outer2_top
+          shift: [-sx - case_wall_margin - case_wall_thickness - 0.5 * tenting_mount_perimeter_diameter + 0.3, 0]
+      columns.tenting_mount.key.tags: [tenting_mount]
+
+    tenting_mount_bottom_left:
+      key:
+        width: tenting_mount_perimeter_diameter
+        height: tenting_mount_perimeter_diameter
+      anchor:
+        - ref: matrix_outer2_bottom
+          shift: [-sx - case_wall_margin - case_wall_thickness - 0.5 * tenting_mount_perimeter_diameter + 0.3, 0]
+      columns.tenting_mount.key.tags: [tenting_mount]
 outlines:
 
   _thumb_high_key_rectangle:
@@ -469,10 +516,16 @@ outlines:
       name: _mcu_polygon
       operation: add
 
-  board:
+  _board:
     - what: outline
       name: _board_polygon
       fillet: 3
+
+  _case_base_board:
+    - what: outline
+      name: _board_polygon
+      fillet: 3
+      expand: case_wall_margin
 
   _switchplate_base:
     - what: outline
@@ -613,16 +666,36 @@ outlines:
       name: _MX_switch_base_cutout
       operation: subtract
 
-  case_base:
+  _tenting_mount_perimeter_right:
+    - what: circle
+      where: tenting_mount_right
+      radius: 0.5*tenting_mount_perimeter_diameter
+
+  _tenting_mount_perimeter:
+    - what: circle
+      where: tenting_mount
+      radius: 0.5*tenting_mount_perimeter_diameter
+
+  _tenting_mount_holes_right:
+    - what: circle
+      where: tenting_mount_right
+      radius: 0.5*tenting_mount_hole_diameter
+
+  _tenting_mount_holes:
+    - what: circle
+      where: tenting_mount
+      radius: 0.5*tenting_mount_hole_diameter
+
+  _case_base:
     - what: outline
-      name: board
+      name: _case_base_board 
     - what: outline
       name: _screw_holes
       operation: subtract
 
   _case_wall_perimeter:
     - what: outline
-      name: board
+      name: _case_base_board 
       expand: case_wall_thickness
 
   _case_standoff_outline:
@@ -635,11 +708,48 @@ outlines:
       where: [screw]
       radius: 0.5 * case_screw_insert_diameter
 
-  case_wall_outline:
+  _case_wall_outline:
     - what: outline
       name: _case_wall_perimeter
     - what: outline
-      name: board
+      name: _case_base_board 
+      operation: subtract
+
+
+  _tented_case_base_outline:
+    - what: outline
+      name: _case_wall_perimeter
+    - what: outline
+      name: _tenting_mount_perimeter
+      operation: add
+
+  _single_sided_tented_case_base_outline:
+    - what: outline
+      name: _case_wall_perimeter
+    - what: outline
+      name: _tenting_mount_perimeter_right
+      operation: add
+
+  _tented_case_base:
+    - what: outline
+      name: _tented_case_base_outline
+      fillet: 5
+    - what: outline
+      name: _screw_holes
+      operation: subtract
+    - what: outline
+      name: _tenting_mount_holes
+      operation: subtract
+
+  _single_sided_tented_case_base:
+    - what: outline
+      name: _single_sided_tented_case_base_outline
+      fillet: 5
+    - what: outline
+      name: _screw_holes
+      operation: subtract
+    - what: outline
+      name: _tenting_mount_holes_right
       operation: subtract
 
   _usb_wall_cutout_rectangle:
@@ -661,7 +771,7 @@ outlines:
       name: _usb_wall_cutout_rectangle
       fillet: usb_fillet
 
-  trrs_cutout_outline:
+  _trrs_cutout_outline:
     - what: outline
       name: _trrs_cutout_rectangle
       # 0.5 doesn't work for some reason
@@ -672,11 +782,15 @@ outlines:
       where: [silicon_footpad]
       radius: 0.5footpad_diameter
 
+  _right_silicon_footpad_cutout_outline:
+    - what: circle
+      where: [right_footpad]
+      radius: 0.5footpad_diameter
 
 pcbs:
   keyboard:
     outlines:
-      - outline: board
+      - outline: _board
         layer: Edge.Cuts
       - outline: switchplate
         layer: User.Comments
@@ -1032,6 +1146,7 @@ pcbs:
           shift: [14+0.5*mcu_height, 0]
 
 cases:
+  
   _usb_wall_cutout:
     - name: _usb_wall_cutout_outline 
       extrude: mcu_height
@@ -1039,13 +1154,13 @@ cases:
       rotate: [270, 0, 0]
 
   _trrs_cutout:
-    - name: trrs_cutout_outline
+    - name: _trrs_cutout_outline
       extrude: mcu_height
       shift: [0, 0, 0.5trrs_height + case_base_thickness + case_support_height + pcb_thickness + trrs_radius - 0.5*trrs_width]
       rotate: [0, 90, 0]
 
   _case_wall:
-    - name: case_wall_outline
+    - name: _case_wall_outline
       extrude: case_base_thickness + case_support_height + case_wall_height
 
 
@@ -1058,24 +1173,24 @@ cases:
       extrude: case_base_thickness + case_support_height
 
   _case_base:
-    - name: board
+    - name: _case_base_board 
       extrude: case_base_thickness
 
   _case_footpad_left:
     - name: _left_footpad_cutout_outline
       extrude: footpad_slot_depth
 
-
-  case:
+  _case_footpad_right:
+    - name: _right_silicon_footpad_cutout_outline
+      extrude: footpad_slot_depth
+      
+  _case_without_footpads:
     - what: case
       name: _case_base
       operation: add
     - what: case
       name: _case_wall
       operation: add
-    - what: case
-      name: _case_footpad_left
-      operation: subtract
     - what: case
       name: _usb_wall_cutout
       operation: subtract
@@ -1089,4 +1204,178 @@ cases:
       name: _case_screw_inserts
       operation: subtract
 
+  flat_case:
+    - what: case
+      name: _case_without_footpads
+      operation: add
+    - what: case
+      name: _case_footpad_left
+      operation: subtract
+    - what: case
+      name: _case_footpad_right
+      operation: subtract
 
+  tented_case:
+    - what: outline
+      name: _tented_case_base
+      extrude: tenting_mount_thickness
+    - what: outline
+      name: _case_base_board 
+      extrude: 100
+      shift: [0, 0, case_base_thickness]
+      operation: subtract
+    - what: case
+      name: _case_wall
+      operation: add
+    - what: case
+      name: _usb_wall_cutout
+      operation: subtract
+    - what: case
+      name: _trrs_cutout
+      operation: subtract
+    - what: case
+      name: _case_standoff
+      operation: add
+    - what: case
+      name: _case_screw_inserts
+      operation: subtract
+
+  single_sided_tented_case:
+    - what: outline
+      name: _single_sided_tented_case_base
+      extrude: tenting_mount_thickness
+    - what: outline
+      name: _case_base_board 
+      extrude: 100
+      shift: [0, 0, case_base_thickness]
+      operation: subtract
+    - what: case
+      name: _case_wall
+      operation: add
+    - what: case
+      name: _usb_wall_cutout
+      operation: subtract
+    - what: case
+      name: _trrs_cutout
+      operation: subtract
+    - what: case
+      name: _case_standoff
+      operation: add
+    - what: case
+      name: _case_screw_inserts
+      operation: subtract
+    - what: case
+      name: _case_footpad_left
+      operation: subtract
+    - what: case
+      name: _case_footpad_right
+      operation: subtract
+
+  tented_case_with_footpads:
+    - what: case
+      name: tented_case
+      operation: add
+    - what: case
+      name: _case_footpad_left
+      operation: subtract
+    - what: case
+      name: _case_footpad_right
+      operation: subtract
+
+  lifted_tented_case:
+    - what: outline
+      name: _tented_case_base
+      extrude: tenting_mount_thickness
+      shift: [0, 0, tenting_mount_lift_height]
+    - what: outline
+      name: _case_base_board 
+      extrude: 100
+      operation: subtract
+    - what: outline
+      name: _case_base_board 
+      extrude: case_base_thickness
+      operation: add
+    - what: case
+      name: _case_wall
+      operation: add
+    - what: case
+      name: _usb_wall_cutout
+      operation: subtract
+    - what: case
+      name: _trrs_cutout
+      operation: subtract
+    - what: case
+      name: _case_standoff
+      operation: add
+    - what: case
+      name: _case_screw_inserts
+      operation: subtract
+
+  lifted_single_sided_tented_case:
+    - what: outline
+      name: _single_sided_tented_case_base
+      extrude: tenting_mount_thickness
+      shift: [0, 0, tenting_mount_lift_height]
+    - what: outline
+      name: _case_base_board 
+      extrude: 100
+      operation: subtract
+    - what: outline
+      name: _case_base_board 
+      extrude: case_base_thickness
+      operation: add
+    - what: case
+      name: _case_wall
+      operation: add
+    - what: case
+      name: _usb_wall_cutout
+      operation: subtract
+    - what: case
+      name: _trrs_cutout
+      operation: subtract
+    - what: case
+      name: _case_standoff
+      operation: add
+    - what: case
+      name: _case_screw_inserts
+      operation: subtract
+    - what: case
+      name: _case_footpad_left
+      operation: subtract
+    - what: case
+      name: _case_footpad_right
+      operation: subtract
+
+  lifted_tented_case_with_footpads:
+    - what: case
+      name: lifted_tented_case
+      operation: add
+    - what: case
+      name: _case_footpad_left
+      operation: subtract
+    - what: case
+      name: _case_footpad_right
+      operation: subtract
+
+
+  switchplate_3D_printed:
+    - what: outline
+      name: switchplate
+      extrude: 2
+    - what: outline
+      name: MX_extra_switchplate_thumb_1mm_base
+      extrude: 1
+      shift: [0, 0, 2]
+    - what: outline
+      name: MX_extra_switchplate_matrix_1mm_base
+      extrude: 1
+      shift: [0, 0, 2]
+    - what: outline
+      name: MX_extra_switchplate_thumb
+      extrude: 2
+      shift: [0, 0, 3]
+    - what: outline
+      name: MX_extra_switchplate_matrix
+      extrude: 2
+      shift: [0, 0, 3]
+      
