@@ -6,3 +6,4 @@ ergogen/output/
 *.kicad_pro
 *.kicad_prl
 *report.txt
+pcbs/sheriff_keyboard_gerber_files*
