@@ -14,30 +14,29 @@ units:
   scrollwheel_height: 14
   screw_diameter: 4
   screw_hole: 2
-  screen_screw_diameter: 4
-  screen_screw_hole: 2.2
   switchplate_switch_cutout: 14
   switchplate_switch_base_cutout: 16
   switchplate_scrollwheel_cutout_x: 17.5
   switchplate_scrollwheel_cutout_y: 14.5
   switchplate_screw_diameter: 3.3
   switchplate_screw_hole: 2.2
-
-  pcb_thickness: 1.6
+  screen_screw_diameter: 4
+  screen_screw_hole: 2.2
 
   thumb_radius: 60
   thumb_cluster_angle: 26
   thumb_cluster_start_angle: 74
   thumb_cluster_rotation: -80
 
-  case_screw_hole: 1.6
+  pcb_thickness: 1.6
+
   case_screw_insert_diameter: 3
   case_standoff_diameter: 6
 
   case_base_thickness: 3
   case_support_height: 2
   case_wall_thickness: 2
-  case_wall_height: 6
+  case_wall_height: 4
   case_wall_margin: 0.2     # Margin between the wall and the board
 
   usb_width: 10
@@ -56,16 +55,14 @@ units:
 
   tenting_mount_hole_diameter: 5
   tenting_mount_perimeter_diameter: 12
-  tenting_mount_thickness: 5
-  tenting_mount_lift_height: 5
+  tenting_mount_thickness: 4
+  tenting_mount_lift_height: 4
 
 points:
   zones:
     #   ----------------------- Key switches -----------------------
 
-    # The primary 6x4 key matrix, plus 3 modifiers.
     matrix:
-      # Choc spacing
 
       anchor.shift: [50, -150]
       key:
@@ -132,7 +129,6 @@ points:
           row_net: row0
           tags: [switch_high]
 
-    # Thumb cluster for Layer and Space keys.
     thumb_center:
       key.skip: true
       anchor:
@@ -181,33 +177,49 @@ points:
         high:
           tags: [thumb_switch_high]
 
-    #   ----------------------- Thumb cluster reference points, uncomment to see -----------------------
 
-      # thumb_outer_ref:
-      #   anchor:
-      #     ref: thumb_center
-      #     orient: thumb_cluster_start_angle - 40
-      #     shift: [thumb_radius, 0]
-      #
-      # thumb_home_ref:
-      #   anchor:
-      #     ref: thumb_center
-      #     orient: thumb_cluster_start_angle - 20
-      #     shift: [thumb_radius, 0]
-      #
-      # thumb_inner_ref:
-      #   anchor:
-      #     ref: thumb_center
-      #     orient: thumb_cluster_start_angle
-      #     shift: [thumb_radius, 0]
-      #
-      # scrollwheel_ref:
-      #   anchor:
-      #     ref: thumb_center
-      #     orient: thumb_cluster_start_angle + 20
-      #     shift: [thumb_radius, 0]
+   #   ----------------------- Thumb cluster reference points -----------------------
+    thumb_outer_ref:
+      anchor:
+        ref: thumb_center
+        orient: thumb_cluster_start_angle - 40
+        shift: [thumb_radius, 0]
+      columns:
+        point.key:
+          width: 3
+          height: 3
 
-    #   ----------------------- Scrollwheel, MCU, screws, footpads -----------------------
+    thumb_home_ref:
+      anchor:
+        ref: thumb_center
+        orient: thumb_cluster_start_angle - 20
+        shift: [thumb_radius, 0]
+      columns:
+        point.key:
+          width: 3
+          height: 3
+
+    thumb_inner_ref:
+      anchor:
+        ref: thumb_center
+        orient: thumb_cluster_start_angle
+        shift: [thumb_radius, 0]
+      columns:
+        point.key:
+          width: 3
+          height: 3
+
+    scrollwheel_ref:
+      anchor:
+        ref: thumb_center
+        orient: thumb_cluster_start_angle + 20
+        shift: [thumb_radius, 0]
+      columns:
+        point.key:
+          width: 3
+          height: 3
+
+    #   ----------------------- Scrollwheel, MCU, screws -----------------------
 
     scrollwheel:
       anchor:
@@ -319,6 +331,7 @@ points:
         ref: mcu_mcu
         shift: [mcu_height/2+3, 11]
 
+    #   ----------------------- Footpads -----------------------
     footpad_top_left:
       key:
         width: footpad_diameter
@@ -376,6 +389,7 @@ points:
           affect: y
       columns.footpad.key.tags: [right_footpad]
 
+    #   ----------------------- Tenting mounts -----------------------
     tenting_mount_top_right:
       key:
         width: tenting_mount_perimeter_diameter
@@ -794,8 +808,6 @@ pcbs:
         layer: Edge.Cuts
       - outline: switchplate
         layer: User.Comments
-      # - outline: _thumb_high_key_rectangle
-      #   layer: User.Comments
 
     footprints:
       ks33_hotswap:
@@ -1364,18 +1376,18 @@ cases:
       extrude: 2
     - what: outline
       name: MX_extra_switchplate_thumb_1mm_base
-      extrude: 1
+      extrude: 1.4
       shift: [0, 0, 2]
     - what: outline
       name: MX_extra_switchplate_matrix_1mm_base
-      extrude: 1
+      extrude: 1.4
       shift: [0, 0, 2]
     - what: outline
       name: MX_extra_switchplate_thumb
-      extrude: 2
-      shift: [0, 0, 3]
+      extrude: 1.6
+      shift: [0, 0, 3.4]
     - what: outline
       name: MX_extra_switchplate_matrix
-      extrude: 2
-      shift: [0, 0, 3]
+      extrude: 1.6
+      shift: [0, 0, 3.4]
       
