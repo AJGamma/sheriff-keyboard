@@ -23,12 +23,22 @@ units:
   screen_screw_diameter: 4
   screen_screw_hole: 2.2
 
+  usb_width: 10
+  usb_height: 20
+  usb_fillet: 2
+
+  trrs_width: 6
+  trrs_height: 20
+  trrs_radius: 2.5
+
   thumb_radius: 60
   thumb_cluster_angle: 26
   thumb_cluster_start_angle: 74
   thumb_cluster_rotation: -80
 
   pcb_thickness: 1.6
+
+  # ---------------------------------------------- The parameters below can be changed. The names are pretty much self-explanatory ----------------------------------------------
 
   case_screw_insert_diameter: 3
   case_standoff_diameter: 6
@@ -39,19 +49,8 @@ units:
   case_wall_height: 4
   case_wall_margin: 0.2     # Margin between the wall and the board
 
-  usb_width: 10
-  usb_height: 20
-  usb_fillet: 2
-
-  trrs_width: 6
-  trrs_height: 20
-  trrs_radius: 2.5
-
   footpad_diameter: 11
   footpad_slot_depth: 0.4
-
-  foot_rack_width: 60
-  foot_rack_height: 30
 
   tenting_mount_hole_diameter: 5
   tenting_mount_perimeter_diameter: 12
