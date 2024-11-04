@@ -59,10 +59,9 @@ One of the motivations for this keyboard is to make the transition from a tradit
 ### Higher up num row
 TODO: finish
 
-### Both wired and wireless support
+### Both wired(Working) and wireless support
 The PCB has both trrs jacks and battery pins, allowing for both wired and wireless connections. For now, only the ZMK firmware is available, and the trrs jacks are used for power delivery: one you hook up any side to a power source, the other side could be charged as well.
 
-QMK support is planned.
 
 ## Layout
 

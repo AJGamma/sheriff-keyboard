@@ -10,14 +10,14 @@ units:
   mcu_width: 18
   # distance keys to mcu
   mcu_padding: 1.5
-  scrollwheel_width: 17
-  scrollwheel_height: 14
+  scrollwheel_width: 18
+  scrollwheel_height: 16
   screw_diameter: 4
   screw_hole: 2
   switchplate_switch_cutout: 14
   switchplate_switch_base_cutout: 16
-  switchplate_scrollwheel_cutout_x: 17.5
-  switchplate_scrollwheel_cutout_y: 14.5
+  switchplate_scrollwheel_cutout_x: 18
+  switchplate_scrollwheel_cutout_y: 16
   switchplate_screw_diameter: 3.3
   switchplate_screw_hole: 2.2
   screen_screw_diameter: 4
@@ -858,10 +858,10 @@ pcbs:
         params:
           from: "{{column_net}}"
           to: "{{colrow}}"
-          A: ENCB_undef
-          B: GND_ENCA
-          C: ENCA_GND
-          D: undef_ENCB
+          A: ENCA_undef
+          B: ENCB_GND
+          C: GND_ENCB
+          D: undef_ENCA
       scroll_diode:
         what: diode
         where: [scrollwheel]
@@ -870,52 +870,32 @@ pcbs:
           to: "{{row_net}}"
         adjust:
           shift: [-5, -9]
-      jumper_sw_left_a:
-        what: jumper
-        where: [scrollwheel]
-        params:
-          side: B  
-          to: ENCB_undef
-          from: ENCB
-        adjust:
-          rotate: 90
-          shift: [-3, 3.81]
-      jumper_sw_left_gnd:
-        what: jumper
-        where: [scrollwheel]
-        params:
-          side: B  
-          to: GND_ENCA
-          from: GND
-        adjust:
-          rotate: 90
-          shift: [-3, 1.27]
       jumper_sw_left_ENCA:
         what: jumper
         where: [scrollwheel]
         params:
           side: B  
-          to: ENCA_GND
+          to: ENCA_undef
           from: ENCA
         adjust:
           rotate: 90
-          shift: [-3, -1.27]
-      jumper_sw_right_a:
+          shift: [-3, 3.81]
+      jumper_sw_left_ENCB:
         what: jumper
         where: [scrollwheel]
         params:
-          side: F  
-          to: undef_ENCB
+          side: B  
+          to: ENCB_GND
           from: ENCB
         adjust:
           rotate: 90
-          shift: [-3, -3.81]
-      jumper_sw_right_gnd:
+          shift: [-3, 1.27]
+      jumper_sw_left_GND:
         what: jumper
         where: [scrollwheel]
         params:
-          side: F  
-          to: ENCA_GND
+          side: B  
+          to: GND_ENCB
           from: GND
         adjust:
           rotate: 90
@@ -925,8 +905,28 @@ pcbs:
         where: [scrollwheel]
         params:
           side: F  
-          to: GND_ENCA
+          to: undef_ENCA
           from: ENCA
+        adjust:
+          rotate: 90
+          shift: [-3, -3.81]
+      jumper_sw_right_ENCB:
+        what: jumper
+        where: [scrollwheel]
+        params:
+          side: F  
+          to: GND_ENCB
+          from: ENCB
+        adjust:
+          rotate: 90
+          shift: [-3, -1.27]
+      jumper_sw_right_GND:
+        what: jumper
+        where: [scrollwheel]
+        params:
+          side: F  
+          to: ENCB_GND
+          from: GND
         adjust:
           rotate: 90
           shift: [-3, 1.27]
@@ -1023,7 +1023,7 @@ pcbs:
         params:
           from: VCC
           to: GND_VCC
-          side: B
+          side: F
         adjust:
           shift: [-6.35, -4.6]
           rotate: 180
