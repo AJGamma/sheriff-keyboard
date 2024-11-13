@@ -83,6 +83,7 @@ TODO
 
 - [This amazing video by Christian Selig](https://www.youtube.com/watch?v=7UXsD7nSfDY) inspired me to build my own keyboard.
 - I learned a lot from the [Corax](https://github.com/dnlbauer/corax-keyboard) keyboard, and borrowed some code as well.
+- The [Arkenswoop](https://github.com/SuperFola/arkenswoop) keyboard has a similar scroll wheel feature, and I fixed my rotary encoder pin definition after checking its kicad file and the information from [this github repo](https://github.com/rroels/EVQWGD001-Pinout).
 
 
 ## Future work
