@@ -1,17 +1,18 @@
 ### TODO
 - Hardware
-    - [o] Jumper sides
+    - [X] Jumper sides
         - [X] Config file
-        - [ ] PCB
+        - [X] PCB
     - [ ] Thumb cluster inner key cap
-    - [ ] Scroll wheel pin testing
+    - [O] Scroll wheel case cutout
+    - [X] Scroll wheel pin testing
     - [ ] Better wall height
 - Firmware
     - ZMK
         - [ ]Mouse emulation
         - [ ]Single-handed layer
     - QMK
-        - [ ] Basic config
+        - [X] Basic config
 
 
 ### Future Work

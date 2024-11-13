@@ -6,16 +6,17 @@
 - Reversible PCB
 - Fully generated, including the case, allowing easy modifications
 - Configurable case generation
-- (Working) Both wired and wireless support
-
+- Both wired and wireless support
 
 ## :art: Gallery
 
-TODO
+![Sheriff](assets/2024-11-13-11-18-53.png)
+![Sheriff](assets/2024-11-13-11-18-12.png)
+
+![Sheriff](assets/2024-11-13-11-18-37.png)
+
 
 ## :sparkles: Features
-
-TODO: finish
 
 ### Rotary Encoders
 
@@ -44,26 +45,38 @@ You could also make the encoder repeat any other key you want. This behavior is 
 > [!NOTE]
 > The ideal form of this function would be that one direction corresponds to a key press while the other direction corresponds to backspace, allowing for easy undoing. However, I haven't figured out how to implement this yet. PRs are welcome.
 
-#### (TODO) Smooth mouse emulation
-
-In theory the encoders can also be used for mouse emulation. Imagine a teeny tiny, easily accessible touchpad on your keyboard! However I haven't implemented this yet.
-
+#### Mouse emulation
+Mouse emulation via the rotary encoder is also available with the QMK firmware.
 
 ### Configurable case generation
 The case is generated with [ergogen](https://github.com/ergogen/ergogen), and the config file was written with configurability in mind. There are multiple versions of the case, including `flat`, `tented`, `sinfle-sided tented` and `lifted tented`. The parameters are highly adjustable. See the `units` part of the [config file](./ergogen/config.yaml) for more details.
 
 ### Easier transitions
 
-One of the motivations for this keyboard is to make the transition from a traditional keyboard to an ergonomic one easier. that's why the default layout is mostly the same as a traditional keyboard, with the only difference being the extra keys in thumb clusters. This way, when you switch back to a traditional keyboard and you reach for the thumb cluster mods, they are simply not there, eliminating any chance of pressing the wrong key.
+One of the motivations for this keyboard is to make the transition from a traditional keyboard to an ergonomic one easier. That's why the default layout is mostly the same as a traditional keyboard, with the only difference being the extra keys in thumb clusters. This way, when you switch back to a traditional keyboard and you reach for the thumb cluster mods, they are simply not there, eliminating any chance of pressing the wrong key.
 
 ### Higher up num row
-TODO: finish
 
-### Both wired(Working) and wireless support
-The PCB has both trrs jacks and battery pins, allowing for both wired and wireless connections. For now, only the ZMK firmware is available, and the trrs jacks are used for power delivery: one you hook up any side to a power source, the other side could be charged as well.
+The key caps on the num row are higher up, making them easier to reach.
 
+<img src="assets/2024-11-13-11-24-31.png" alt="num_row" width="400" align="center"/>
+
+### Both wired and wireless support
+The PCB has both trrs jacks and battery pins, allowing for both wired and wireless connections.
+
+Both ZMK(wireless) and QMK(wired) firmwares are implemented; however, I've encountered several issues with the ZMK firmware, including:
+- Two halves unable to pair(swapping boards did not help, neither did flashing reset firmware, and I'm 90% sure nothing's wrong with the firmware)
+- Rotary encoder motions sometimes skipped
+
+It's worth noting that I'm not using the official nice!nano boards, but rather the Pro Micro ATMEGA32U4 boards, which might be the cause of the issues.
+
+## Firmware
+Supports wired usage with [QMK](https://qmk.fm/) firmware. Repository [here](https://github.com/AJGamma/sheriff-qmk-config)
+
+Wireless usage is supported with [ZMK](https://zmk.dev/). Repository [here](https://github.com/AJGamma/sheriff-zmk-config). I couldn't get it to work properly though, detail [here](#both-wired-and-wireless-support).
 
 ## Layout
+TODO
 
 ## :bulb: Inspirations
 
@@ -72,4 +85,11 @@ The PCB has both trrs jacks and battery pins, allowing for both wired and wirele
 
 
 ## Future work
-- [ ] Add QMK support
+- [ ] Screen
+- [ ] LEDs
+- [ ] More intuitive scroll wheel position and orientation
+- [ ] New logo
+- [ ] 3D-printed key caps
+- [ ] More acquirable scroll wheel
+
+

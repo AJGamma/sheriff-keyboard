@@ -592,6 +592,13 @@ outlines:
       adjust:
         shift: [0.5kx+27, -sy]
 
+  _thumb_inner_subtracter:
+    - what: rectangle
+      where: thumb_cluster_inner_low
+      size: [1.6kx, 1.6ky]
+      adjust:
+        rotate: 45
+      bound: false
 
   _MX_switch_base_cutout:
     - what: rectangle
@@ -608,6 +615,8 @@ outlines:
     - what: rectangle
       where: [scrollwheel]
       size: [switchplate_scrollwheel_cutout_x, switchplate_scrollwheel_cutout_y]
+      adjust:
+        shift: [0.6, 0]
       bound: false
   _screw_holes:
     - what: circle
@@ -641,6 +650,9 @@ outlines:
     - what: outline
       name: _high_switch_thumb_filter
       operation: intersect
+    - what: outline
+      name: _thumb_inner_subtracter
+      operation: subtract
 
       
   MX_extra_switchplate_thumb: 
@@ -806,6 +818,8 @@ pcbs:
       - outline: _board
         layer: Edge.Cuts
       - outline: switchplate
+        layer: User.Comments
+      - outline: MX_extra_switchplate_thumb
         layer: User.Comments
 
     footprints:
