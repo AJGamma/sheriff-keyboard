@@ -87,6 +87,7 @@ TODO
 
 
 ## Future work
+- [ ] Build guide
 - [ ] Screen
 - [ ] LEDs
 - [ ] More intuitive scroll wheel position and orientation
