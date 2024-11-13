@@ -65,11 +65,11 @@ The key caps on the num row are higher up, making them easier to reach.
 ### Both wired and wireless support
 The PCB has both trrs jacks and battery pins, allowing for both wired and wireless connections.
 
-Both ZMK(wireless) and QMK(wired) firmwares are implemented; however, I've encountered several issues with the ZMK firmware, including:
+Both ZMK(wireless) and QMK(wired) firmware are implemented; however, I've encountered several issues with the ZMK firmware, including:
 - Two halves unable to pair(swapping boards did not help, neither did flashing reset firmware, and I'm 90% sure nothing's wrong with the firmware)
 - Rotary encoder motions sometimes skipped
 
-It's worth noting that I'm not using the official nice!nano boards, but rather the Pro Micro ATMEGA32U4 boards, which might be the cause of the issues.
+It's worth noting that I'm not using the official nice!nano boards, but rather the Pro Micro ATMEGA32U4 nice!nano v2 compatible boards, which might be the cause of the issues.
 
 ## Firmware
 Supports wired usage with [QMK](https://qmk.fm/) firmware. Repository [here](https://github.com/AJGamma/sheriff-qmk-config)
