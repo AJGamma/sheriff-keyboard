@@ -1,4 +1,4 @@
-# :gun:Sheriff: A :fire:BLAZINGLY FAST:fire:, Feature-rich Ergonomic Split Keyboard Generated with Ergogen
+# :gun:Sheriff: A :fire:BLAZINGLY FAST:fire:, Feature-rich Ergonomic Split Keyboard with Thumb Scroll Wheels
 
 - Double rotary encoder on the thumb cluster mapped to arrow keys by default, :fire:BLAZINGLY FAST:fire: for text editing
 - Higher keys on the num row, easier to reach
@@ -7,6 +7,7 @@
 - Fully generated, including the case, allowing easy modifications
 - Configurable case generation
 - Both wired and wireless support
+- Generated with [Ergogen](https://github.com/ergogen/ergogen)
 
 ## :art: Gallery
 
