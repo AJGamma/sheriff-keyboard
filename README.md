@@ -69,7 +69,7 @@ Both ZMK(wireless) and QMK(wired) firmware are implemented; however, I've encoun
 - Two halves unable to pair(swapping boards did not help, neither did flashing reset firmware, and I'm 90% sure nothing's wrong with the firmware)
 - Rotary encoder motions sometimes skipped
 
-It's worth noting that I'm not using the official nice!nano boards, but rather the Pro Micro ATMEGA32U4 nice!nano v2 compatible boards, which might be the cause of the issues.
+It's worth noting that I'm not using the official nice!nano boards, but rather the Pro Micro NRF52840 nice!nano v2 compatible boards, which might be the cause of the issues.
 
 ## Firmware
 Supports wired usage with [QMK](https://qmk.fm/) firmware. Repository [here](https://github.com/AJGamma/sheriff-qmk-config)
