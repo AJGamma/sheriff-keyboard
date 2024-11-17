@@ -20,8 +20,7 @@
 ## :sparkles: Features
 
 ### Rotary Encoders
-
-TODO: add demo gif
+https://github.com/user-attachments/assets/6208423b-0291-43b4-bef7-f6bb31aa5ce3
 
 The core feature of the Sheriff is the easily accessible rotary encoders positioned on the thumb clusters.
 
