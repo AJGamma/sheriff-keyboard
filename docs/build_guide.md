@@ -30,6 +30,7 @@ Buying spare parts is recommended. Default values for `Wired` and `Wireless` are
 | TRRS jacks | 2 | Required | Optional | Used for power transmission for wireless version |
 | 3.5mm wires | 1 | Required | Optional | Make sure to buy the ones with 4 rings! the ones with 3 won't work and may ruin your boards! |
 | 3.7V lithium batteries | 2 | Not needed | Required | I use 6*12*30mm ones |
+| Slider switches | 2 | Not needed | Required | K3-1296S-E1 and MK-12C02-G015 both work |
 | 12-pin 2.54mm pins and sockets | 4 |  |  | Sockets are highly recommended especially if you use Pro Micro ATMEGA32U4 boards |
 | 11mm silicone footpads |  |  |  | Used for flat cases |
 | M5 screws | 8 |  |  | Used for tented cases, determine lengths yourself |
