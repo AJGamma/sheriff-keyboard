@@ -28,37 +28,37 @@ The core feature of the Sheriff is the easily accessible rotary encoders positio
 
 ##### QMK version (`custom_scroll_layers` version)
 
-| Key Held | Left Counter-clockwise | Left Clockwise | Right Counter-clockwise | Right Clockwise |  Description |
-| --------------- | --------------- | --------------- | --------------- | --------------- |  --------------- |
-| None | Left | Right | Down | Up |  |
-| Backspace | Backspace | Delete | Backspace | Delete |  |
-| Esc | Volume-down | Volume-up | Mouse wheel down | Mouse wheel up | Sym layer |
-| Space | Left | Right | Repeat last key | Repeat last key's alternative | Nav layer |
-| V | Mouse left | Mouse right | Mouse down | Mouse up | Mouse layer |
-| W | b | w | } | { |  |
-| E | ge | e | Down | Up |  |
-| U | u | C-r | C-r | u |  |
-| Y | C-z | C-y | C-y | C-z |  |
-| Z | C-z | S-C-z | S-C-z | C-z |  |
-| 8 | Next activated behavior 8 times | Next activated behavior 8 times | Next activated behavior 8 times | Next activated behavior 8 times |  |
+| Behavior        | Key Held  | Left Counter-clockwise          | Left Clockwise                  | Right Counter-clockwise         | Right Clockwise                 |
+|-----------------|-----------|---------------------------------|---------------------------------|---------------------------------|---------------------------------|
+| Arrow key       | None      | Left                            | Right                           | Down                            | Up                              |
+| Deletion        | Backspace | Backspace                       | Delete                          | Backspace                       | Delete                          |
+| Mouse wheel     | Esc       | Volume-down                     | Volume-up                       | Mouse wheel down                | Mouse wheel up                  |
+| Repeating       | Space     | Left                            | Right                           | Repeat last key                 | Repeat last key's alternative   |
+| Mouse emulation | V         | Mouse left                      | Mouse right                     | Mouse down                      | Mouse up                        |
+| Vim motion      | W         | b                               | w                               | }                               | {                               |
+| Vim motion      | E         | ge                              | e                               | Down                            | Up                              |
+| Vim undo/redo   | U         | u                               | C-r                             | C-r                             | u                               |
+| Undo/redo       | Y         | C-z                             | C-y                             | C-y                             | C-z                             |
+| Undo/redo       | Z         | C-z                             | S-C-z                           | S-C-z                           | C-z                             |
+| Speed up        | 8         | Next activated behavior 8 times | Next activated behavior 8 times | Next activated behavior 8 times | Next activated behavior 8 times |
 
 ##### ZMK version
 
-| Key Held | Left Counter-clockwise | Left Clockwise | Right Counter-clockwise | Right Clockwise |  Description |
-| --------------- | --------------- | --------------- | --------------- | --------------- |  --------------- |
-| None | Left | Right | Down | Up |  |
-| Backspace | Backspace | Delete | Backspace | Delete |  |
-| Esc | Volume-down | Volume-up | Mouse wheel down | Mouse wheel up | Sym layer |
-| Space | Left | Right | Repeat last key | Repeat last key's alternative | Nav layer |
-| V | Mouse left | Mouse right | Mouse down | Mouse up | Mouse layer |
-| W | b | w | } | { |  |
-| E | ge | e | Down | Up |  |
-| 8 | Left * 8 | Right * 8 | Down * 8 | Up * 8 |  |
+| Behavior        | Key Held  | Left Counter-clockwise | Left Clockwise | Right Counter-clockwise | Right Clockwise               | Description |
+|-----------------|-----------|------------------------|----------------|-------------------------|-------------------------------|-------------|
+| Arrow key       | None      | Left                   | Right          | Down                    | Up                            |             |
+| Deletion        | Backspace | Backspace              | Delete         | Backspace               | Delete                        |             |
+| Mouse wheel     | Esc       | Volume-down            | Volume-up      | Mouse wheel down        | Mouse wheel up                | Sym layer   |
+| Repeating       | Space     | Left                   | Right          | Repeat last key         | Repeat last key's alternative | Nav layer   |
+| Mouse emulation | V         | Mouse left             | Mouse right    | Mouse down              | Mouse up                      | Mouse layer |
+| Vim motion      | W         | b                      | w              | }                       | {                             |             |
+| Vim motion      | E         | ge                     | e              | Down                    | Up                            |             |
+| Speed up        | 8         | Left * 8               | Right * 8      | Down * 8                | Up * 8                        |             |
 
 
 
 ### Configurable case generation
-The case is generated with [ergogen](https://github.com/ergogen/ergogen), and the config file was written with configurability in mind. There are multiple versions of the case, including `flat`, `tented`, `sinfle-sided tented` and `lifted tented`. The parameters are highly adjustable. See the `units` part of the [config file](./ergogen/config.yaml) for more details.
+The case is generated with [ergogen](https://github.com/ergogen/ergogen), and the config file was written with configurability in mind. There are multiple versions of the case, including `flat`, `tented`, `sinfle-sided tented` and `lifted tented`. The parameters are highly adjustable, and customization can easily be done. See the [doc](/docs/case_customization.md) for more information.
 
 ### Easier transitions
 

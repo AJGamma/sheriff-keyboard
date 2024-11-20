@@ -5,6 +5,7 @@
 - Case is mounted with M2*3.2 threaded screw inserts and M2 screws.
 - This keyboard uses 18 MX switches and 50 Gateron ks-27 switches, and the diode directions are opposite for the two types of switches.
 - See [this build guide of the Corax Keyboard for scroll wheel installation and modificaton](https://github.com/dnlbauer/corax-keyboard/blob/main/docs/BuildGuide.md) 
+- My soldering order: jumpers → diodes → hot swap sockets → slider switch → reset button → TRRS jack → MCU pins → battery → encoder → MCU
 
 
 ## Parts list
@@ -41,8 +42,81 @@ Buying spare parts is recommended. Default values for `Wired` and `Wireless` are
 
 ## Step By Step
 
-TODO
+
+### 1. Connect jumpers on the back side of the PCBs
+
+There are 9 jumpers on each side. Connect the ones on the **back** side of the PCBs, that is, on the same side as the diodes and hot swap sockets. They are positioned near the MCU and the scroll wheel.
 
 
+<img src="../assets/jumpers.png" alt="jumpers" width="400" align="center"/>
+
+(The image shows 10 jumpers, that is because this is the 0.7 version and one of the jumpers were wrongly placed. The release version does not have such issue.)
+
+### 2. Solder diodes
+Make sure you solder them in the right directions. The little line on the diode should be on the same side as the line on the silk:
+```raw
+   ┌───────┬──┐                                               
+   ┤Diode  │  ├                                               
+   └───────┴──┘                                               
+     │╲  │                                                    
+    ─┤ 〉├─ Silk                                              
+     │╱  │                                                   
+```
+
+<img src="../assets/diodes.png" alt="diodes" width="400" align="center"/>
+
+### 3. Solder hot swap sockets
+
+### 4. Solder slider switch, reset button and trrs jack
+
+The switch should be on the **front** side of the PCB. This is the only part which you do need to solder on the front side. The reset button and trrs jack are placed on the front side but soldered on the back side.
+
+<img src="../assets/switch.png" alt="switch" width="400" align="center"/>
+
+### 5. Solder MCU pins
+
+Place the MCU pins on the front side, use tape or an actual MCU(no need to be soldered) to hold them in place, then solder the pins on the back side.
+
+### 6. Solder battery
+Place the battery on the front side of the PCB, then solder the wires on the back.
 
 
+Eventually your MCU, slider and battery should look like this:
+
+<img src="../assets/mcu.png" alt="mcu" width="300" align="center"/>
+
+### 7. Solder encoders
+Remove the little column near the pins (required) and crop the extrusion on the other end (optional but recommended). Install and solder.
+
+<img src="../assets/encoder_feet.png" alt="encoder_feet" width="400" align="center"/>
+
+
+### 8. Install threaded screw inserts
+
+Simply put, this is done by heating the inserts with a soldering iron and pushing them into the holes on the case. However, if your 3D printer is not well-calibrated, there may be a size error and you holes won't perfectly align with the ones on the PCB. To address this problem, you can insert longer screws first through the holes, screw the inserts onto the screws, and then heat them & push/pull.
+
+<img src="../assets/threaded_inserts.png" alt="threaded_inserts" width="400" align="center"/>
+<br>
+<img src="../assets/threaded_inserts_2.png" alt="threaded_inserts_3" width="400" align="center"/>
+
+### 9. Assemble the case, install the switches and key caps
+<img src="../assets/assembly.png" alt="assembly" width="400" align="center"/>
+
+
+### 10. Install footpads/tenting screws
+
+#### 10.1 Footpads
+Because the footpad slots need supports, you may not get a very even surface for the footpads, and the double-sided tapes that come with the footpads may not work well. Remove the tapes and use glue instead.
+
+<img src="../assets/footpads.png" alt="footpads" width="400" align="center"/>
+
+#### 10.2 Tenting screws
+Use M5 bolts and nuts to tent the case, and use silicone rubber caps for better grip.
+<img src="../assets/tenting.png" alt="tenting" width="400" align="center"/>
+
+
+### 11. Flash the firmware
+See firmware repos.
+
+### 12. Connect to your device
+If you're using wired build, connect the two halves with a TRRS cable **with 4 rings**. Connect the left half to your device.
