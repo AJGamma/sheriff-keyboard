@@ -47,7 +47,7 @@ units:
   case_support_height: 2
   case_wall_thickness: 2
   case_wall_height: 4
-  case_wall_margin: 0.2     # Margin between the wall and the board
+  case_wall_margin: 0.5     # Margin between the wall and the board
 
   footpad_diameter: 11
   footpad_slot_depth: 0.4
@@ -534,7 +534,7 @@ outlines:
       name: _board_polygon
       fillet: 3
 
-  _case_base_board:
+  case_base_board:
     - what: outline
       name: _board_polygon
       fillet: 3
@@ -713,14 +713,14 @@ outlines:
 
   _case_base:
     - what: outline
-      name: _case_base_board 
+      name: case_base_board 
     - what: outline
       name: _screw_holes
       operation: subtract
 
   _case_wall_perimeter:
     - what: outline
-      name: _case_base_board 
+      name: case_base_board 
       expand: case_wall_thickness
 
   _case_standoff_outline:
@@ -737,7 +737,7 @@ outlines:
     - what: outline
       name: _case_wall_perimeter
     - what: outline
-      name: _case_base_board 
+      name: case_base_board 
       operation: subtract
 
 
@@ -1198,7 +1198,7 @@ cases:
       extrude: case_base_thickness + case_support_height
 
   _case_base:
-    - name: _case_base_board 
+    - name: case_base_board 
       extrude: case_base_thickness
 
   _case_footpad_left:
@@ -1245,7 +1245,7 @@ cases:
       name: _tented_case_base
       extrude: tenting_mount_thickness
     - what: outline
-      name: _case_base_board 
+      name: case_base_board 
       extrude: 100
       shift: [0, 0, case_base_thickness]
       operation: subtract
@@ -1270,7 +1270,7 @@ cases:
       name: _single_sided_tented_case_base
       extrude: tenting_mount_thickness
     - what: outline
-      name: _case_base_board 
+      name: case_base_board 
       extrude: 100
       shift: [0, 0, case_base_thickness]
       operation: subtract
@@ -1313,11 +1313,11 @@ cases:
       extrude: tenting_mount_thickness
       shift: [0, 0, tenting_mount_lift_height]
     - what: outline
-      name: _case_base_board 
+      name: case_base_board 
       extrude: 100
       operation: subtract
     - what: outline
-      name: _case_base_board 
+      name: case_base_board 
       extrude: case_base_thickness
       operation: add
     - what: case
@@ -1342,11 +1342,11 @@ cases:
       extrude: tenting_mount_thickness
       shift: [0, 0, tenting_mount_lift_height]
     - what: outline
-      name: _case_base_board 
+      name: case_base_board 
       extrude: 100
       operation: subtract
     - what: outline
-      name: _case_base_board 
+      name: case_base_board 
       extrude: case_base_thickness
       operation: add
     - what: case

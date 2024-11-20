@@ -20,34 +20,42 @@
 ## :sparkles: Features
 
 ### Rotary Encoders
-
-TODO: add demo gif
+https://github.com/user-attachments/assets/6208423b-0291-43b4-bef7-f6bb31aa5ce3
 
 The core feature of the Sheriff is the easily accessible rotary encoders positioned on the thumb clusters.
 
-#### Arrow keys
+#### Encoder behaviors
 
-In the default layer, the encoder rotation steps are mapped to arrow keys, thus enabling easy, fast and precise cursor movements.
+##### QMK version (`custom_scroll_layers` version)
 
-Moreover, If you press `8` while you scroll, each single encoder step will correspond to 8 arrow key taps, allowing for even faster movements.
+| Key Held | Left Counter-clockwise | Left Clockwise | Right Counter-clockwise | Right Clockwise |  Description |
+| --------------- | --------------- | --------------- | --------------- | --------------- |  --------------- |
+| None | Left | Right | Down | Up |  |
+| Backspace | Backspace | Delete | Backspace | Delete |  |
+| Esc | Volume-down | Volume-up | Mouse wheel down | Mouse wheel up | Sym layer |
+| Space | Left | Right | Repeat last key | Repeat last key's alternative | Nav layer |
+| V | Mouse left | Mouse right | Mouse down | Mouse up | Mouse layer |
+| W | b | w | } | { |  |
+| E | ge | e | Down | Up |  |
+| U | u | C-r | C-r | u |  |
+| Y | C-z | C-y | C-y | C-z |  |
+| Z | C-z | S-C-z | S-C-z | C-z |  |
+| 8 | Next activated behavior 8 times | Next activated behavior 8 times | Next activated behavior 8 times | Next activated behavior 8 times |  |
 
-#### Tab, delete and backspace
+##### ZMK version
 
-Since these keys often require continuous multiple presses as well, the encoder rotation steps are mapped to these keys as well.
+| Key Held | Left Counter-clockwise | Left Clockwise | Right Counter-clockwise | Right Clockwise |  Description |
+| --------------- | --------------- | --------------- | --------------- | --------------- |  --------------- |
+| None | Left | Right | Down | Up |  |
+| Backspace | Backspace | Delete | Backspace | Delete |  |
+| Esc | Volume-down | Volume-up | Mouse wheel down | Mouse wheel up | Sym layer |
+| Space | Left | Right | Repeat last key | Repeat last key's alternative | Nav layer |
+| V | Mouse left | Mouse right | Mouse down | Mouse up | Mouse layer |
+| W | b | w | } | { |  |
+| E | ge | e | Down | Up |  |
+| 8 | Left * 8 | Right * 8 | Down * 8 | Up * 8 |  |
 
-Specifically:
-- If you press `Tab` while scrolling, clockwise(rightwards) rotation will correspond to `Tab`, and counter-clockwise(leftwards) rotation will correspond to `Shift(Tab)`.
-- If you press `Backspace` (left thumb cluster outer position) while scrolling, the clockwise(rightwards) rotation will correspond to `Delete`, and the counter-clockwise(leftwards) rotation will correspond to `Backspace`.
 
-#### Arbitrary key repeats
-
-You could also make the encoder repeat any other key you want. This behavior is enabled on the `Symbol` layer, activated by pressing `Esc` on the right thumb cluster outer position.
-
-> [!NOTE]
-> The ideal form of this function would be that one direction corresponds to a key press while the other direction corresponds to backspace, allowing for easy undoing. However, I haven't figured out how to implement this yet. PRs are welcome.
-
-#### Mouse emulation
-Mouse emulation via the rotary encoder is also available with the QMK firmware.
 
 ### Configurable case generation
 The case is generated with [ergogen](https://github.com/ergogen/ergogen), and the config file was written with configurability in mind. There are multiple versions of the case, including `flat`, `tented`, `sinfle-sided tented` and `lifted tented`. The parameters are highly adjustable. See the `units` part of the [config file](./ergogen/config.yaml) for more details.
@@ -87,6 +95,7 @@ TODO
 
 
 ## Future work
+- [ ] Build guide
 - [ ] Screen
 - [ ] LEDs
 - [ ] More intuitive scroll wheel position and orientation
