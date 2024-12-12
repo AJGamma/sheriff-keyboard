@@ -1,4 +1,4 @@
-ergogen/output/
+**/ergogen/output/
 .DS_Store
 *.gbr
 *.gbrjob
