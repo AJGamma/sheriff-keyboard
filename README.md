@@ -85,7 +85,13 @@ Supports wired usage with [QMK](https://qmk.fm/) firmware. Repository [here](htt
 Wireless usage is supported with [ZMK](https://zmk.dev/). Repository [here](https://github.com/AJGamma/sheriff-zmk-config). I couldn't get it to work properly though, detail [here](#both-wired-and-wireless-support).
 
 ## Layout
-TODO
+
+Default layer:
+<img src="assets/main.png" alt="default layer" width="400" align="center"/>
+Layer 1:
+<img src="assets/sym.png" alt="Layer 1" width="400" align="center"/>
+<img src="assets/nav.png" alt="Layer 2" width="400" align="center"/>
+<img src="assets/num.png" alt="Layer 3" width="400" align="center"/>
 
 ## :bulb: Inspirations
 

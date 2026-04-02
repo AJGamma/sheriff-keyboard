@@ -1,0 +1,816 @@
+
+units:
+  kx: U
+  ky: U
+  padding: 4
+  px: kx+padding
+  py: ky+padding
+  sx: 0.5px
+  sy: 0.5py
+  mcu_height: 34
+  mcu_width: 18
+  # distance keys to mcu
+  mcu_padding: 1.5
+  scrollwheel_width: 18
+  scrollwheel_height: 16
+  screw_diameter: 4
+  screw_hole: 2
+  switchplate_switch_cutout: 14
+  switchplate_switch_base_cutout: 16
+  switchplate_scrollwheel_cutout_x: 18
+  switchplate_scrollwheel_cutout_y: 16
+  switchplate_screw_diameter: 3.3
+  switchplate_screw_hole: 2.2
+  screen_screw_diameter: 4
+  screen_screw_hole: 2.2
+
+  usb_width: 10
+  usb_height: 20
+  usb_fillet: 2
+
+  trrs_width: 6
+  trrs_height: 20
+  trrs_radius: 2.5
+
+  thumb_radius: 60
+  thumb_cluster_angle: 26
+  thumb_cluster_start_angle: 74
+  thumb_cluster_rotation: -80
+
+  pcb_thickness: 1.6
+
+  # ---------------------------------------------- The parameters below can be changed. The names are pretty much self-explanatory ----------------------------------------------
+
+  case_screw_insert_diameter: 3
+  case_standoff_diameter: 6
+
+  case_base_thickness: 3
+  case_support_height: 2
+  case_wall_thickness: 2
+  case_wall_height: 4
+  case_wall_margin: 0.5     # Margin between the wall and the board
+
+  footpad_diameter: 11
+  footpad_slot_depth: 0.4
+
+  tenting_mount_hole_diameter: 5
+  tenting_mount_perimeter_diameter: 12
+  tenting_mount_thickness: 4
+  tenting_mount_lift_height: 4
+
+
+points:
+  zones:
+    #   ----------------------- Key switches -----------------------
+
+    matrix:
+
+      anchor.shift: [50, -150]
+      key:
+        tags: [switch]
+        padding: 1ky
+        spread: 1kx
+        height: 1ky
+        width: 1kx
+      columns:
+        outer2:
+          rows:
+            mod:
+              skip: true
+            bottom:
+              row_net: row2
+            home:
+              row_net: row1
+            top:
+              row_net: row0
+              tags: [switch_high]
+            num:
+              skip: true
+          key.column_net: col0
+        outer1:
+          # rows.mod.skip: true
+          rows.num.skip: true
+          rows.top.tags: [switch_high]
+          key.column_net: col1
+        pinky:
+          # for pinky(and the two rows above, home position is actually the bottom row, and the "num" row here is an extra row for ring finger)
+          rows.top.tags: [switch_high]
+          key.column_net: col2
+        ring:
+          key:
+            stagger: 15 - ky
+            column_net: col3
+
+        middle:
+          key:
+            stagger: 4
+            column_net: col4
+          rows.mod.skip: true
+
+        index:
+          key:
+            stagger: -7
+            column_net: col5
+        inner:
+          rows.mod.skip: true
+          key:
+            stagger: -3
+            column_net: col6
+      rows:
+        # Four main rows, one partial row.
+        mod:
+          row_net: row4
+        bottom:
+          row_net: row3
+        home:
+          row_net: row2
+        top:
+          row_net: row1
+        num:
+          row_net: row0
+          tags: [switch_high]
+
+    thumb_center:
+      key.skip: true
+      anchor:
+        ref: matrix_index_home
+        shift: [3, -95]
+
+    thumb_cluster:
+      key:
+        tags: [switch]
+        padding: kx
+        spread: ky
+        height: 1ky
+        width: 1kx
+        # rotate: -90
+      anchor:
+        ref: thumb_center
+        orient: thumb_cluster_start_angle - thumb_cluster_angle
+        shift: [thumb_radius - 0.5kx, ky]
+        rotate: thumb_cluster_rotation
+      columns:
+        inner:
+          rows.high.skip: true
+          rows.low:
+            row_net: row4
+            column_net: col6
+          key.rotate: 15
+          key.shift: [-2.5, -1]
+        home:
+          rows.high:
+            column_net: col1
+            row_net: row0
+            shift: [0.1kx, 0]
+            width: 1.6kx
+          rows.low:
+            column_net: col0
+            row_net: row4
+
+        outer:
+          rows.high.skip: true
+          rows.low:
+            column_net: col0
+            row_net: row3
+      rows:
+        low:
+          tags: [switch]
+        high:
+          tags: [thumb_switch_high]
+
+
+   #   ----------------------- Thumb cluster reference points -----------------------
+    thumb_outer_ref:
+      anchor:
+        ref: thumb_center
+        orient: thumb_cluster_start_angle - 40
+        shift: [thumb_radius, 0]
+      columns:
+        point.key:
+          width: 3
+          height: 3
+
+    thumb_home_ref:
+      anchor:
+        ref: thumb_center
+        orient: thumb_cluster_start_angle - 20
+        shift: [thumb_radius, 0]
+      columns:
+        point.key:
+          width: 3
+          height: 3
+
+    thumb_inner_ref:
+      anchor:
+        ref: thumb_center
+        orient: thumb_cluster_start_angle
+        shift: [thumb_radius, 0]
+      columns:
+        point.key:
+          width: 3
+          height: 3
+
+    scrollwheel_ref:
+      anchor:
+        ref: thumb_center
+        orient: thumb_cluster_start_angle + 20
+        shift: [thumb_radius, 0]
+      columns:
+        point.key:
+          width: 3
+          height: 3
+
+    #   ----------------------- Scrollwheel, MCU, screws -----------------------
+
+    scrollwheel:
+      anchor:
+        ref: matrix_middle_mod
+        orient: -90
+        shift: [3, 0]
+      columns:
+        scrollwheel:
+          key:
+            tags: [scrollwheel]
+            column_net: col5
+            width: scrollwheel_width
+            height: scrollwheel_height
+      rows:
+        scrollwheel:
+          row_net: row4
+
+    mcu:
+      anchor:
+        ref: matrix_inner_num
+      columns:
+        mcu:
+          key:
+            tags: [mcu]
+            width: mcu_height
+            height: mcu_width
+            shift: [kx+mcu_padding + 1, -mcu_width/2 + 0.7]
+            rotate: -90
+
+    screw_top_left:
+      key:
+        width: 4
+        height: 4
+      anchor:
+        ref:
+          matrix_pinky_num
+        shift: [-0.8kx, -2]
+      columns.screw.key.tags: [screw]
+        
+    screw_bottom_left:
+      key:
+        width: 4
+        height: 4
+      anchor:
+        ref:
+          matrix_outer1_mod
+        shift: [-0.8kx, 3]
+      columns.screw.key.tags: [screw]
+
+    screw_top_middle:
+      key:
+        width: 4
+        height: 4
+      anchor:
+        ref: matrix_ring_num
+        shift: [0, 0.5ky+2]
+      columns.screw.key.tags: [screw]
+
+    screw_bottom_middle:
+      key:
+        width: 4
+        height: 4
+      anchor:
+        ref: matrix_middle_mod
+        shift: [0, -0.5kx - 3]
+      columns.screw.key.tags: [screw]
+
+    screw_top_right:
+      key:
+        width: 5
+        height: 5
+      anchor:
+        ref: matrix_index_num
+        shift: [0, 0.5ky+2]
+      columns.screw.key.tags: [screw]
+
+    screw_thumb_left:
+      key:
+        width: 5
+        height: 5
+      anchor:
+        ref: thumb_cluster_home_high
+        shift: [-0.5kx-2, 0]
+      columns.screw.key.tags: [screw]
+
+    screw_thumb_right:
+      key:
+        width: 5
+        height: 5
+      anchor:
+        ref: thumb_cluster_home_high
+        shift: [0.5kx+2, 0]
+      columns.screw.key.tags: [screw]
+
+    thumb_home_high_ref:
+      key:
+        width: 1
+        height: 1
+      anchor:
+        ref: thumb_cluster_home_high
+        shift: [-1.5sx, sy]
+        rotate: -thumb_cluster_start_angle + thumb_cluster_angle - thumb_cluster_rotation
+
+    trrs_ref_point:
+      key:
+        width: 1
+        height: 4
+      anchor:
+        ref: mcu_mcu
+        shift: [mcu_height/2+3, 11]
+
+    #   ----------------------- Footpads -----------------------
+    footpad_top_left:
+      key:
+        width: footpad_diameter
+        height: footpad_diameter
+      anchor:
+        ref: matrix_outer2_top
+        shift: [-0.5kx+0.5footpad_diameter, 0.5ky-0.5footpad_diameter]
+      columns.footpad.key.tags: [silicon_footpad]
+
+    footpad_bottom_left:
+      key:
+        width: footpad_diameter
+        height: footpad_diameter
+      anchor:
+        ref: matrix_outer2_bottom
+        shift: [-0.5kx+0.5footpad_diameter, -0.5ky+0.5footpad_diameter]
+      columns.footpad.key.tags: [silicon_footpad]
+
+    footpad_bottom_middle:
+      key:
+        width: footpad_diameter
+        height: footpad_diameter
+      anchor:
+        ref: matrix_middle_mod
+      columns.footpad.key.tags: [silicon_footpad]
+
+    footpad_top_middle:
+      key:
+        width: footpad_diameter
+        height: footpad_diameter
+      anchor:
+        ref: matrix_ring_num
+      columns.footpad.key.tags: [silicon_footpad]
+
+    footpad_top_right:
+      key:
+        width: footpad_diameter
+        height: footpad_diameter
+      anchor:
+        - ref: mcu_mcu
+          shift: [0, 0.5*mcu_width - 0.5*footpad_diameter]
+        - ref: footpad_top_left_footpad
+          shift: [0, footpad_diameter]
+          affect: y
+      columns.footpad.key.tags: [right_footpad]
+
+    footpad_bottom_right:
+      key:
+        width: footpad_diameter
+        height: footpad_diameter
+      anchor:
+        - ref: mcu_mcu
+          shift: [0, 0.5*mcu_width - 0.5*footpad_diameter]
+        - ref: thumb_cluster_home_low
+          affect: y
+      columns.footpad.key.tags: [right_footpad]
+
+    #   ----------------------- Tenting mounts -----------------------
+    tenting_mount_top_right:
+      key:
+        width: tenting_mount_perimeter_diameter
+        height: tenting_mount_perimeter_diameter
+      anchor:
+        - ref: matrix_inner_num
+          # shift: [0, 0.5ky + 2]
+          affect: [y, r]
+        - ref: mcu_mcu
+          shift: [0.5mcu_height + padding+2kx, 0.5mcu_width + padding - 2 + case_wall_margin + case_wall_thickness + 0.5 * tenting_mount_perimeter_diameter - 0.3]
+          affect: x
+      columns.tenting_mount.key.tags: [tenting_mount, tenting_mount_right]
+
+    tenting_mount_bottom_right:
+      key:
+        width: tenting_mount_perimeter_diameter
+        height: tenting_mount_perimeter_diameter
+      anchor:
+        - ref: thumb_cluster_outer_low
+          shift: [sx + case_wall_margin + case_wall_thickness + 0.5 * tenting_mount_perimeter_diameter - 0.3, 0]
+      columns.tenting_mount.key.tags: [tenting_mount, tenting_mount_right]
+
+    tenting_mount_top_left:
+      key:
+        width: tenting_mount_perimeter_diameter
+        height: tenting_mount_perimeter_diameter
+      anchor:
+        - ref: matrix_outer2_top
+          shift: [-sx - case_wall_margin - case_wall_thickness - 0.5 * tenting_mount_perimeter_diameter + 0.3, 0]
+      columns.tenting_mount.key.tags: [tenting_mount]
+
+    tenting_mount_bottom_left:
+      key:
+        width: tenting_mount_perimeter_diameter
+        height: tenting_mount_perimeter_diameter
+      anchor:
+        - ref: matrix_outer2_bottom
+          shift: [-sx - case_wall_margin - case_wall_thickness - 0.5 * tenting_mount_perimeter_diameter + 0.3, 0]
+      columns.tenting_mount.key.tags: [tenting_mount]
+outlines:
+
+  _thumb_high_key_rectangle:
+    - what: rectangle
+      where: thumb_cluster_home_high
+      size: [1.5kx, 1ky]
+
+  _key_outline:
+    - what: polygon
+      operation: stack
+      points:
+        - ref: matrix_outer2_top
+          shift: [-sx, sy]
+        - ref: matrix_outer2_bottom
+          shift: [-sx, -sy]
+        - ref: matrix_outer1_mod
+          shift: [-sx, -sy]
+        - ref: matrix_ring_mod
+          shift: [-sx, -sy]
+        - ref: matrix_ring_mod
+          shift: [sx, -sy]
+        - ref: thumb_cluster_home_low
+          shift: [-sx, -sy]
+        - ref: thumb_cluster_outer_low
+          shift: [sx, -sy]
+        - ref: thumb_cluster_outer_low
+          shift: [sx, sy]
+        - ref: thumb_cluster_home_high
+          shift: [1.5sx, sy]
+        # - ref: mcu_mcu
+        #   shift: [-0.5mcu_height - padding + 47.2, 0.5mcu_width + padding]
+        - ref: thumb_cluster_home_high
+          shift: [-1.5sx, sy]
+        - ref: matrix_inner_bottom
+          shift: [0.5kx+2, -sy]
+        - ref: matrix_inner_num
+          shift: [0.5kx+2, sy]
+        - ref: matrix_index_num
+          shift: [sx, sy]
+        - ref: matrix_middle_num
+          shift: [sx, sy]
+        - ref: matrix_middle_num
+          shift: [-sx, sy]
+        - ref: matrix_pinky_num
+          shift: [-sx, sy]
+        - ref: matrix_pinky_num
+          shift: [-px, 0]
+
+  _thumb_high_polygon:
+    - what: polygon
+      points:
+        - ref: thumb_home_high_ref
+        - ref: thumb_home_high_ref
+          shift: [-1.5sx, 0]
+        - ref: thumb_home_high_ref
+          shift: [-1.5sx, -py]
+        - ref: thumb_home_high_ref
+          shift: [0, -py]
+
+  _thumb_hori_polygon:
+    - what: polygon
+      points:
+        - ref: thumb_home_high_ref
+        - ref: thumb_home_high_ref
+          shift: [1.5sx, 0]
+        - ref: thumb_home_high_ref
+          shift: [1.5sx, -py]
+        - ref: thumb_home_high_ref
+          shift: [0, -py]
+
+  _mcu_polygon:
+    - what: polygon
+      points:
+        - ref: matrix_inner_num
+          shift: [-sx, sy]
+        - ref: matrix_inner_num
+          shift: [sx, sy]
+        - ref: mcu_mcu
+          shift: [-0.5mcu_height - padding + 1.2, 0.5mcu_width + padding - 2]
+        - ref: mcu_mcu
+          shift: [0.5mcu_height + padding+2kx, 0.5mcu_width + padding - 2]
+        - ref: matrix_inner_bottom
+          shift: [-sx, -sy]
+
+  _thumb_mcu_intersect:
+    - what: outline
+      name: _thumb_hori_polygon
+    - what: outline
+      name: _mcu_polygon
+      operation: intersect
+
+  _board_polygon:
+    - what: outline
+      name: _key_outline
+    - what: outline
+      name: _thumb_high_polygon
+      operation: add
+    - what: outline
+      name: _mcu_polygon
+      operation: add
+
+  _board:
+    - what: outline
+      name: _board_polygon
+      fillet: 3
+
+  case_base_board:
+    - what: outline
+      name: _board_polygon
+      fillet: 3
+      expand: case_wall_margin
+
+  _switchplate_base:
+    - what: outline
+      name: _key_outline
+    - what: outline
+      name: _thumb_high_polygon
+      operation: add
+    - what: outline
+      name: _thumb_mcu_intersect
+      operation: add
+
+  _high_switch_cutout:
+    - what: rectangle
+      where: [switch_high, thumb_switch_high]
+      size: switchplate_switch_cutout
+      bound: false
+
+
+  _high_switch_matrix_filter:
+    - what: rectangle
+      where: [switch_high]
+      size: [kx, 50]
+      bound: false
+      adjust:
+        shift: [0, 25-0.5ky]
+    - what: rectangle
+      where: matrix_outer2_top
+      size: [50, 50]
+      bound: false
+      operation: add
+      adjust:
+        shift: [-25+0.5kx, 25-0.5ky]
+    - what: rectangle
+      where: matrix_inner_num
+      size: [50, 50]
+      bound: false
+      operation: add
+      adjust:
+        shift: [25-0.5kx, 25-0.5ky]
+
+  _high_switch_thumb_filter:
+    - what: rectangle
+      where: [thumb_switch_high]
+      size: [50, 50]
+      adjust:
+        shift: [0, 25-0.5ky]
+    - what: rectangle
+      where: matrix_inner_bottom
+      size: [50, 50]
+      operation: intersect
+      adjust:
+        shift: [0.5kx+27, -sy]
+
+  _thumb_inner_subtracter:
+    - what: rectangle
+      where: thumb_cluster_inner_low
+      size: [1.6kx, 1.6ky]
+      adjust:
+        rotate: 45
+      bound: false
+
+  _MX_switch_base_cutout:
+    - what: rectangle
+      where: [switch_high, thumb_switch_high]
+      size: switchplate_switch_base_cutout
+      bound: false
+
+  _switch_cutout:
+    - what: rectangle
+      where: [switch, switch_high, thumb_switch_high]
+      size: switchplate_switch_cutout
+      bound: false
+  _scrollwheel_cutout:
+    - what: rectangle
+      where: [scrollwheel]
+      size: [et its y rangewitchplate_scrollwheel_cutout_x, switchplate_scrollwheel_cutout_y]
+      adjust:
+        shift: [0.6, 0]
+      bound: false
+  _screw_holes:
+    - what: circle
+      where: [screw]
+      radius: 0.5switchplate_screw_hole
+
+  MX_extra_switchplate_matrix:
+    - what: outline
+      name: _switchplate_base
+      fillet: 3
+    - what: outline
+      name: _high_switch_matrix_filter
+      operation: intersect
+    - what: outline
+      name: _high_switch_cutout
+      operation: subtract
+    - what: outline
+      name: _screw_holes
+      operation: subtract
+
+  MX_extra_switchplate_matrix_1mm_base:
+    - what: outline
+      name: MX_extra_switchplate_matrix
+    - what: outline
+      name: _MX_switch_base_cutout
+      operation: subtract
+
+  _MX_extra_switchplate_thumb_outline:
+    - what: outline
+      name: _switchplate_base
+    - what: outline
+      name: _high_switch_thumb_filter
+      operation: intersect
+    - what: outline
+      name: _thumb_inner_subtracter
+      operation: subtract
+
+      
+  MX_extra_switchplate_thumb: 
+    - what: outline
+      name: _MX_extra_switchplate_thumb_outline
+      fillet: 3
+    - what: outline
+      name: _high_switch_cutout
+      operation: subtract
+    - what: outline
+      name: _screw_holes
+      operation: subtract
+
+
+  MX_extra_switchplate_thumb_1mm_base: 
+    - what: outline
+      name: MX_extra_switchplate_thumb
+    - what: outline
+      name: _MX_switch_base_cutout
+      operation: subtract
+
+  switchplate:
+    - what: outline
+      name: _switchplate_base
+      fillet: 3
+    - what: outline
+      name: _switch_cutout
+      operation: subtract
+    - what: outline
+      name: _scrollwheel_cutout
+      operation: subtract
+    - what: outline
+      name: _screw_holes
+      operation: subtract
+    - what: outline
+      name: _MX_switch_base_cutout
+      operation: subtract
+
+  _tenting_mount_perimeter_right:
+    - what: circle
+      where: tenting_mount_right
+      radius: 0.5*tenting_mount_perimeter_diameter
+
+  _tenting_mount_perimeter:
+    - what: circle
+      where: tenting_mount
+      radius: 0.5*tenting_mount_perimeter_diameter
+
+  _tenting_mount_holes_right:
+    - what: circle
+      where: tenting_mount_right
+      radius: 0.5*tenting_mount_hole_diameter
+
+  _tenting_mount_holes:
+    - what: circle
+      where: tenting_mount
+      radius: 0.5*tenting_mount_hole_diameter
+
+  _case_base:
+    - what: outline
+      name: case_base_board 
+    - what: outline
+      name: _screw_holes
+      operation: subtract
+
+  _case_wall_perimeter:
+    - what: outline
+      name: case_base_board 
+      expand: case_wall_thickness
+
+  _case_standoff_outline:
+    - what: circle
+      where: [screw]
+      radius: 0.5case_standoff_diameter
+
+  _case_screw_inserts_outline:
+    - what: circle
+      where: [screw]
+      radius: 0.5 * case_screw_insert_diameter
+
+  _case_wall_outline:
+    - what: outline
+      name: _case_wall_perimeter
+    - what: outline
+      name: case_base_board 
+      operation: subtract
+
+
+  _tented_case_base_outline:
+    - what: outline
+      name: _case_wall_perimeter
+    - what: outline
+      name: _tenting_mount_perimeter
+      operation: add
+
+  _single_sided_tented_case_base_outline:
+    - what: outline
+      name: _case_wall_perimeter
+    - what: outline
+      name: _tenting_mount_perimeter_right
+      operation: add
+
+  _tented_case_base:
+    - what: outline
+      name: _tented_case_base_outline
+      fillet: 5
+    - what: outline
+      name: _screw_holes
+      operation: subtract
+    - what: outline
+      name: _tenting_mount_holes
+      operation: subtract
+
+  _single_sided_tented_case_base:
+    - what: outline
+      name: _single_sided_tented_case_base_outline
+      fillet: 5
+    - what: outline
+      name: _screw_holes
+      operation: subtract
+    - what: outline
+      name: _tenting_mount_holes_right
+      operation: subtract
+
+  _usb_wall_cutout_rectangle:
+    - what: rectangle
+      where: mcu
+      size: [usb_height, usb_width]
+      adjust:
+        shift: [-0.5*mcu_height, 0]
+      bound: false
+
+  _trrs_cutout_rectangle:
+    - what: rectangle
+      where: trrs_ref_point
+      size: [trrs_width, trrs_height]
+      bound: false
+    
+  _usb_wall_cutout_outline:
+    - what: outline
+      name: _usb_wall_cutout_rectangle
+      fillet: usb_fillet
+
+  _trrs_cutout_outline:
+    - what: outline
+      name: _trrs_cutout_rectangle
+      # 0.5 doesn't work for some reason
+      fillet: 0.49*trrs_width
+
+  _left_footpad_cutout_outline:
+    - what: circle
+      where: [silicon_footpad]
+      radius: 0.5footpad_diameter
+
+  _right_silicon_footpad_cutout_outline:
+    - what: circle
+      where: [right_footpad]
+      radius: 0.5footpad_diameter
+
