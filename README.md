@@ -1,6 +1,6 @@
-# :gun:Sheriff: A :fire:BLAZINGLY FAST:fire:, Feature-rich Ergonomic Split Keyboard with Thumb Scroll Wheels
+# :gun:Sheriff: A Feature-rich Ergonomic Split Keyboard with Thumb Scroll Wheels
 
-- Double rotary encoder on the thumb cluster mapped to arrow keys by default, :fire:BLAZINGLY FAST:fire: for text editing
+- Double rotary encoder on the thumb cluster mapped to arrow keys by default, ideal for text editing
 - Higher keys on the num row, easier to reach
 - Similar layout to the more traditional keyboard on notebooks, less mental overload for switching between devices
 - Reversible PCB
@@ -87,10 +87,19 @@ Wireless usage is supported with [ZMK](https://zmk.dev/). Repository [here](http
 ## Layout
 
 Default layer:
+
 <img src="assets/main.png" alt="default layer" width="400" align="center"/>
+
 Layer 1:
+
 <img src="assets/sym.png" alt="Layer 1" width="400" align="center"/>
+
+Layer 2:
+
 <img src="assets/nav.png" alt="Layer 2" width="400" align="center"/>
+
+Layer 3:
+
 <img src="assets/num.png" alt="Layer 3" width="400" align="center"/>
 
 ## :bulb: Inspirations

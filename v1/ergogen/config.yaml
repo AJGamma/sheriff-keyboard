@@ -46,7 +46,7 @@ units:
   case_base_thickness: 3
   case_support_height: 2
   case_wall_thickness: 2
-  case_wall_height: 4
+  case_wall_height: 5.6
   case_wall_margin: 0.5     # Margin between the wall and the board
 
   footpad_diameter: 11
@@ -55,7 +55,7 @@ units:
   tenting_mount_hole_diameter: 5
   tenting_mount_perimeter_diameter: 12
   tenting_mount_thickness: 4
-  tenting_mount_lift_height: 4
+  tenting_mount_lift_height: case_base_thickness + case_support_height + case_wall_height - tenting_mount_thickness
 
 points:
   zones:
@@ -1175,7 +1175,7 @@ cases:
   _usb_wall_cutout:
     - name: _usb_wall_cutout_outline 
       extrude: mcu_height
-      shift: [0, 0, 0.5usb_height + case_base_thickness + 1]
+      shift: [0, 0, 0.5usb_height + case_base_thickness + case_support_height + pcb_thickness]
       rotate: [270, 0, 0]
 
   _trrs_cutout:
